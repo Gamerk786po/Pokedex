@@ -1,7 +1,12 @@
+import Header from "./components/header/header"
+
 function App() {
   return (
     <>
-      <h1 className="text-4xl">Hello</h1>
+    {/* The main div containing everything */}
+      <div className="min-h-screen bg-gradient-to-r from-blue-200 to-blue-400">
+        <Header />
+      </div>
     </>
   )
 }
