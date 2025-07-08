@@ -1,1 +1,5 @@
 @import "tailwindcss";
+/* The body styling for permanently showing scroll bar in the side */
+body {
+    overflow-y: scroll;
+  }
