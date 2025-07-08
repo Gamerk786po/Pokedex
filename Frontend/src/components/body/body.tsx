@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "./card";
-import { motion } from "framer-motion"; // for using framer motion 
+import { motion } from "framer-motion"; // for using framer motion
 import { Typewriter } from "react-simple-typewriter"; // for using typing animation
 
 // Interface for the 20 got pokemons
@@ -16,20 +16,38 @@ const Body = () => {
   // Pokemons data
   const [pokemons, setPokemons] = useState<fetchedPokemonsInterface[]>([]);
 
-  // Offset of api which will be altered by 20
+  // Offset of API which will be altered by 20
   const [offset, setOffSet] = useState<number>(0);
 
   // isLoading
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Storring the error
+  const [error, setError] = useState<string>("");
+
   // The function for api call of 20 pokemons in pagination.
   const getPokemons = async () => {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=20&${offset}`
-    );
-    const json = await res.json();
-    setPokemons(json.results);
-    setTimeout(() => setIsLoading(false), 1700);
+    try {
+      const res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`
+      );
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+
+      const json = await res.json();
+      setPokemons(json.results);
+      setTimeout(() => setIsLoading(false), 1700);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
+      setIsLoading(false);
+      console.error(err);
+    }
   };
 
   // The useEffect for API requests
@@ -58,6 +76,16 @@ const Body = () => {
             />
           </span>
         </div>
+      ) : error ? (
+        // The container for errors
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="text-center text-red-600 font-semibold mt-10 text-xl"
+        >
+          {error}
+        </motion.div>
       ) : (
         // The container for pokemon cards
         <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
