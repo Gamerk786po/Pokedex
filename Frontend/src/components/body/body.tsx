@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import Card from "./card";
+import { useEffect, useState, lazy, Suspense } from "react";
+const Card = lazy(() => import("./card"));
 import { motion } from "framer-motion"; // for using framer motion
 import { Typewriter } from "react-simple-typewriter"; // for using typing animation
+import PaginationButton from "./Pagination-button";
 
 // Interface for the 20 got pokemons
 interface fetchedPokemonsInterface {
@@ -38,7 +39,7 @@ const Body = () => {
 
       const json = await res.json();
       setPokemons(json.results);
-      setTimeout(() => setIsLoading(false), 1700);
+      setTimeout(() => setIsLoading(false), 1500);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -53,7 +54,8 @@ const Body = () => {
   // The useEffect for API requests
   useEffect(() => {
     getPokemons();
-  }, []);
+    setIsLoading(true);
+  }, [offset]);
 
   return (
     <>
@@ -64,6 +66,7 @@ const Body = () => {
             className="h-40"
             src="/loading-gif/Pikachu-running.gif"
             alt="loading"
+            loading="lazy"
           ></img>
           <span>
             <Typewriter
@@ -87,23 +90,48 @@ const Body = () => {
           {error}
         </motion.div>
       ) : (
-        // The container for pokemon cards
-        <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
-          {pokemons.map((pokemon) => {
-            const id = pokemon.url.split("/")[6]; // extracting id
-            const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
-            return (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                key={pokemon.name}
-              >
-                <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
-              </motion.div>
-            );
-          })}
-        </div>
+        // The container for containing body components
+        <Suspense fallback={<></>}>
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
+              {pokemons.map((pokemon) => {
+                const id = pokemon.url.split("/")[6]; // extracting id
+                const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
+                return (
+                  <motion.div
+                    initial={{ opacity: 0.2 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.9 }}
+                    key={pokemon.name}
+                  >
+                    <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
+                  </motion.div>
+                );
+              })}
+            </div>
+            {/* The container for buttons for back, first page and next */}
+            <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
+              {/* The back button */}
+              <PaginationButton
+                label="Back"
+                disabled={offset === 0}
+                onClick={() => setOffSet(offset - 20)}
+              />
+              {/* The first page button */}
+              <PaginationButton
+                label="First-Page"
+                disabled={false}
+                onClick={() => setOffSet(0)}
+              />
+              {/* The next button */}
+              <PaginationButton
+                label="Next"
+                disabled={false}
+                onClick={() => setOffSet(offset + 20)}
+              />
+            </div>
+          </div>
+        </Suspense>
       )}
     </>
   );
