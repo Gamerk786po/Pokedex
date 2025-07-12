@@ -1,5 +1,27 @@
 @import "tailwindcss";
 /* The body styling for permanently showing scroll bar in the side */
 body {
-    overflow-y: scroll;
+  overflow-y: scroll;
+}
+/* Step 1: Define your custom drop-shadow as a theme variable */
+:root {
+  --drop-shadow-lightning: 0 0 35px rgba(255, 255, 0, 0.9);
+}
+
+/* Step 2: Define keyframes for electric pulse effect */
+@keyframes electric {
+  0%,
+  100% {
+    filter: drop-shadow(var(--drop-shadow-lightning));
   }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5));
+  }
+}
+
+/* Step 3: Create custom utility class using @layer */
+@layer utilities {
+  .animate-electric {
+    animation: electric 2s ease-in-out infinite;
+  }
+}

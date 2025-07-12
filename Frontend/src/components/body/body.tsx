@@ -42,7 +42,7 @@ const Body = () => {
 
       const json = await res.json();
       setPokemons(json.results);
-      setTimeout(() => setIsLoading(false), 1500);
+      setTimeout(() => setIsLoading(false), 1200);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -67,7 +67,7 @@ const Body = () => {
         // The container for loading screen
         <div className="flex justify-center items-center flex-col overflow-auto">
           <img
-            className="h-40"
+            className="h-40 [filter:drop-shadow(var(--drop-shadow-lightning))] animate-electric"
             src="/loading-gif/Pikachu-running.gif"
             alt="loading"
             loading="lazy"
