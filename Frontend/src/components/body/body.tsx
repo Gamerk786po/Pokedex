@@ -18,7 +18,10 @@ const Body = () => {
   const [pokemons, setPokemons] = useState<fetchedPokemonsInterface[]>([]);
 
   // Offset of API which will be altered by 20
-  const [offset, setOffSet] = useState<number>(0);
+  const [offset, setOffSet] = useState<number>(()=>{
+    const offsetLocalStored = localStorage.getItem(`offset`);
+    return offsetLocalStored ? parseInt(offsetLocalStored) : 0;
+  });
 
   // isLoading
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -53,6 +56,7 @@ const Body = () => {
 
   // The useEffect for API requests
   useEffect(() => {
+    localStorage.setItem('offset', `${offset}`);
     getPokemons();
     setIsLoading(true);
   }, [offset]);
