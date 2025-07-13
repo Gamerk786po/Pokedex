@@ -5,7 +5,7 @@ import { Typewriter } from "react-simple-typewriter"; // for using typing animat
 import PaginationButton from "./Pagination-button";
 
 // Interface for the 20 got pokemons
-interface fetchedPokemonsInterface {
+interface PokemonsInterface {
   name: string;
   url: string;
 }
@@ -15,7 +15,10 @@ const Body = () => {
   // State managements:
 
   // Pokemons data
-  const [pokemons, setPokemons] = useState<fetchedPokemonsInterface[]>([]);
+  const [pokemons, setPokemons] = useState<PokemonsInterface[]>([]);
+
+  // Storring the error for extracting pokemons data
+  const [error, setError] = useState<string>("");
 
   // Offset of API which will be altered by 20
   const [offset, setOffSet] = useState<number>(()=>{
@@ -26,9 +29,10 @@ const Body = () => {
   // isLoading
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Storring the error
-  const [error, setError] = useState<string>("");
+  // Is pokemon card clicked
+  const [isCardClick, setIsCardClick] = useState<boolean>(false);
 
+  // Pokemon info
   // The function for api call of 20 pokemons in pagination.
   const getPokemons = async () => {
     try {
@@ -53,6 +57,18 @@ const Body = () => {
       console.error(err);
     }
   };
+
+  // The handleClick function for each pokemon card
+  const handleClick = async(api: string) => {
+    // setIsLoading(true) // enable this after making the process of getting data. 
+    getPokemonInfo(api)
+  }
+  // The function for API call  of the clicked pokemon data
+  const getPokemonInfo = async(api: string) => {
+    const res = await fetch(api);
+    const data = await res.json();
+    console.log(data)
+  }
 
   // The useEffect for API requests
   useEffect(() => {
@@ -97,18 +113,22 @@ const Body = () => {
         // The container for containing body components
         <Suspense fallback={<></>}>
           <div className="flex flex-col items-center justify-center">
+            {/* The div enclosing the deck of pokemons */}
             <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
               {pokemons.map((pokemon) => {
                 const id = pokemon.url.split("/")[6]; // extracting id
                 const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
                 return (
+                  // The div enclosing each pokemon
                   <motion.div
+                    className=""
+                    onClick={() => handleClick(pokemon.url)}
                     initial={{ opacity: 0.2 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.9 }}
                     key={pokemon.name}
                   >
-                    <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
+                    <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`}/>
                   </motion.div>
                 );
               })}
