@@ -1,9 +1,10 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 const Card = lazy(() => import("./card"));
 import { motion } from "framer-motion"; // for using framer motion
-import { Typewriter } from "react-simple-typewriter"; // for using typing animation
 import PaginationButton from "./Pagination-button";
 import { usePokemon } from "../../context/PokemonContext/usePokemon"; // The custom hook for PokemonContext
+import LoadingScreen from "./loadingScreen";
+import ErrorScreen from "./errorScreen";
 
 // Interface for the 20 got pokemons
 interface PokemonsInterface {
@@ -41,13 +42,13 @@ interface PokemonMoves {
     };
   }[];
 }
-interface PokemonAbilities{
+interface PokemonAbilities {
   ability: {
-    name: string,
-    url: string
-  },
-  is_hidden: boolean,
-  slot: number
+    name: string;
+    url: string;
+  };
+  is_hidden: boolean;
+  slot: number;
 }
 
 // The component for body
@@ -72,11 +73,15 @@ const Body = () => {
   // Is pokemon card clicked
   const [isCardClick, setIsCardClick] = useState<boolean>(false);
 
+  // api of clicked pokemon
+  const [pokemonApi, setpokemonApi] = useState<string>("");
+
   /* 
   Pokemon info
   UsePokemon for PokemonContext
   */
   const { setClickedPokemon, clickedPokemon } = usePokemon();
+  // Functions
 
   // The function for api call of 20 pokemons in pagination.
   const getPokemons = async () => {
@@ -104,86 +109,81 @@ const Body = () => {
   };
 
   // The handleClick function for each pokemon card
-  const handleClick = async (api: string) => {
+  const handleClick = (api: string) => {
     // setIsLoading(true) // enable this after making the process of getting data.
-    getPokemonInfo(api);
+    setpokemonApi(api);
+    setIsCardClick(true);
   };
 
   // The function for API call  of the clicked pokemon data
-  const getPokemonInfo = async (api: string) => {
-    const res = await fetch(api);
-    const data = await res.json();
-    const pokemonData = {
-      name: data.species.name,
-      img: data.sprites.front_default,
-      height: data.height,
-      weight: data.weight,
-      types: (data.types as PokemonTypes[]).map((t) => t.type.name),
-      stats: (data.stats as PokemonStats[]).map((s) => ({
-        base_stat: s.base_stat,
-        effort: s.effort,
-        stat: s.stat.name,
-      })),
-      moves: (data.moves as PokemonMoves[]).map((m) => ({
-        move: {
-          name: m.move.name,
-          url: m.move.url,
-        },
-        level_learned_at: m.version_group_details[0].level_learned_at,
-        move_learn_method: m.version_group_details[0].move_learn_method.name,
-      })),
-      abilities: (data.abilities as PokemonAbilities[]).map((a) => ({
-        ability:{
-          name: a.ability.name,
-          url: a.ability.url
-        },
-        is_hidden: a.is_hidden
-      }))
-    };
-    console.log(pokemonData);
-    setClickedPokemon(pokemonData);
-    console.log(clickedPokemon);
+  const getPokemonInfo = async () => {
+    try {
+      const res = await fetch(pokemonApi);
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      const pokemonData = {
+        // for understanding this structure check out PokemonContext/clickedPokemon interface.
+        name: data.species.name,
+        img: data.sprites.front_default,
+        height: data.height,
+        weight: data.weight,
+        types: (data.types as PokemonTypes[]).map((t) => t.type.name),
+        stats: (data.stats as PokemonStats[]).map((s) => ({
+          base_stat: s.base_stat,
+          effort: s.effort,
+          stat: s.stat.name,
+        })),
+        moves: (data.moves as PokemonMoves[]).map((m) => ({
+          move: {
+            name: m.move.name,
+            url: m.move.url,
+          },
+          level_learned_at: m.version_group_details[0].level_learned_at,
+          move_learn_method: m.version_group_details[0].move_learn_method.name,
+        })),
+        abilities: (data.abilities as PokemonAbilities[]).map((a) => ({
+          ability: {
+            name: a.ability.name,
+            url: a.ability.url,
+          },
+          is_hidden: a.is_hidden,
+        })),
+      };
+      setClickedPokemon(pokemonData); // setting the clickedPokemon data
+      setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
+    } catch (err: unknown) {  // Error handling
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
+      setIsLoading(false);
+      console.error(err);
+    }
   };
 
   // The useEffect for API requests
   useEffect(() => {
-    localStorage.setItem("offset", `${offset}`);
-    getPokemons();
-    setIsLoading(true);
-  }, [offset]);
+    if (isCardClick == true) {
+      setIsLoading(true);
+      getPokemonInfo();
+    } else {
+      setIsLoading(true);
+      localStorage.setItem("offset", `${offset}`);
+      getPokemons();
+    }
+  }, [offset, isCardClick]);
 
   return (
     <>
       {isLoading ? (
-        // The container for loading screen
-        <div className="flex justify-center items-center flex-col overflow-auto">
-          <img
-            className="h-40 [filter:drop-shadow(var(--drop-shadow-lightning))] animate-electric"
-            src="/loading-gif/Pikachu-running.gif"
-            alt="loading"
-            loading="lazy"
-          ></img>
-          <span>
-            <Typewriter
-              words={["Hang tight! Pikachu's almost there.."]}
-              cursor
-              loop={0}
-              typeSpeed={30}
-              deleteSpeed={50}
-              delaySpeed={1000}
-            />
-          </span>
-        </div>
+        <LoadingScreen />
       ) : error ? (
-        // The container for errors
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="text-center text-red-600 font-semibold mt-10 text-xl"
-        >
-          {error}
-        </motion.div>
+        <ErrorScreen error={error}/>
       ) : (
         // The container for containing body components
         <Suspense fallback={<></>}>
