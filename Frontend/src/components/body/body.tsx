@@ -5,6 +5,7 @@ import PaginationButton from "./bodyComponents/Pagination-button";
 import LoadingScreen from "./bodyComponents/loadingScreen";
 import ErrorScreen from "./bodyComponents/errorScreen";
 import { usePokemon } from "../../context/PokemonContext/usePokemon";
+import InfoCard from "./bodyComponents/pokemon-info-card/infocard";
 
 // Interface for the 20 got pokemons
 interface PokemonsInterface {
@@ -80,7 +81,7 @@ const Body = () => {
   Pokemon info
   UsePokemon for PokemonContext
   */
-  const {clickedPokemon, setClickedPokemon} = usePokemon()
+  const { setClickedPokemon } = usePokemon();
   // Functions
 
   // The function for api call of 20 pokemons in pagination.
@@ -127,6 +128,7 @@ const Body = () => {
       const data = await res.json();
       const pokemonData = {
         // for understanding this structure check out PokemonContext/clickedPokemon interface.
+        id: data.id,
         name: data.species.name,
         img: data.sprites.front_default,
         height: data.height,
@@ -155,7 +157,8 @@ const Body = () => {
       };
       setClickedPokemon(pokemonData); // setting the clickedPokemon data
       setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
-    } catch (err: unknown) {  // Error handling
+    } catch (err: unknown) {
+      // Error handling
       if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -168,70 +171,78 @@ const Body = () => {
 
   // The useEffect for API requests
   useEffect(() => {
-    if (isCardClick == true) {
+    setIsLoading(true);
+    localStorage.setItem("offset", `${offset}`);
+    getPokemons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset]);
+  //  The useEffect for API request for clickedPokemon
+  useEffect(() => {
+    if (isCardClick && pokemonApi) {
       setIsLoading(true);
       getPokemonInfo();
-    } else {
-      setIsLoading(true);
-      localStorage.setItem("offset", `${offset}`);
-      getPokemons();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset, isCardClick]);
-
+  }, [isCardClick, pokemonApi]);
   // The returning statement of Body component
   return (
     <>
       {isLoading ? (
         <LoadingScreen />
       ) : error ? (
-        <ErrorScreen error={error}/>
+        <ErrorScreen error={error} />
       ) : (
         // The container for containing body components
         <Suspense fallback={<></>}>
-          <div className="flex flex-col items-center justify-center">
-            {/* The div enclosing the deck of pokemons */}
-            <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
-              {pokemons.map((pokemon) => {
-                const id = pokemon.url.split("/")[6]; // extracting id
-                const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
-                return (
-                  // The div enclosing each pokemon
-                  <motion.div
-                    className=""
-                    onClick={() => handleClick(pokemon.url)}
-                    initial={{ opacity: 0.2 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.9 }}
-                    key={pokemon.name}
-                  >
-                    <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
-                  </motion.div>
-                );
-              })}
+          {isCardClick ? (
+            <div className="flex justify-center items-center flex-wrap gap-15 mt-10 w-full">
+              <InfoCard />
             </div>
-            {/* The container for buttons for back, first page and next */}
-            <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
-              {/* The back button */}
-              <PaginationButton
-                label="Back"
-                disabled={offset === 0}
-                onClick={() => setOffSet(offset - 20)}
-              />
-              {/* The first page button */}
-              <PaginationButton
-                label="First-Page"
-                disabled={false}
-                onClick={() => setOffSet(0)}
-              />
-              {/* The next button */}
-              <PaginationButton
-                label="Next"
-                disabled={false}
-                onClick={() => setOffSet(offset + 20)}
-              />
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              {/* The div enclosing the deck of pokemons */}
+              <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
+                {pokemons.map((pokemon) => {
+                  const id = pokemon.url.split("/")[6]; // extracting id
+                  const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
+                  return (
+                    // The div enclosing each pokemon
+                    <motion.div
+                      className=""
+                      onClick={() => handleClick(pokemon.url)}
+                      initial={{ opacity: 0.2 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.9 }}
+                      key={pokemon.name}
+                    >
+                      <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
+                    </motion.div>
+                  );
+                })}
+              </div>
+              {/* The container for buttons for back, first page and next */}
+              <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
+                {/* The back button */}
+                <PaginationButton
+                  label="Back"
+                  disabled={offset === 0}
+                  onClick={() => setOffSet(offset - 20)}
+                />
+                {/* The first page button */}
+                <PaginationButton
+                  label="First-Page"
+                  disabled={false}
+                  onClick={() => setOffSet(0)}
+                />
+                {/* The next button */}
+                <PaginationButton
+                  label="Next"
+                  disabled={false}
+                  onClick={() => setOffSet(offset + 20)}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </Suspense>
       )}
     </>

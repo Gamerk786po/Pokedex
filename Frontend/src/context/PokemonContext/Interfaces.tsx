@@ -1,5 +1,7 @@
 // Interface for pokemon.
 export interface ClickedPokemonInterface {
+  // id 
+  id: number
   // Name
   name: string;
   // IMG
