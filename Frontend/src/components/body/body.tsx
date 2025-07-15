@@ -1,10 +1,10 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-const Card = lazy(() => import("./card"));
+const Card = lazy(() => import("./bodyComponents/card"));
 import { motion } from "framer-motion"; // for using framer motion
-import PaginationButton from "./Pagination-button";
-import { usePokemon } from "../../context/PokemonContext/usePokemon"; // The custom hook for PokemonContext
-import LoadingScreen from "./loadingScreen";
-import ErrorScreen from "./errorScreen";
+import PaginationButton from "./bodyComponents/Pagination-button";
+import LoadingScreen from "./bodyComponents/loadingScreen";
+import ErrorScreen from "./bodyComponents/errorScreen";
+import { usePokemon } from "../../context/PokemonContext/usePokemon";
 
 // Interface for the 20 got pokemons
 interface PokemonsInterface {
@@ -80,7 +80,7 @@ const Body = () => {
   Pokemon info
   UsePokemon for PokemonContext
   */
-  const { setClickedPokemon, clickedPokemon } = usePokemon();
+  const {clickedPokemon, setClickedPokemon} = usePokemon()
   // Functions
 
   // The function for api call of 20 pokemons in pagination.
@@ -176,8 +176,10 @@ const Body = () => {
       localStorage.setItem("offset", `${offset}`);
       getPokemons();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, isCardClick]);
 
+  // The returning statement of Body component
   return (
     <>
       {isLoading ? (

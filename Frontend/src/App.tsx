@@ -1,4 +1,4 @@
-import Body from "./components/body/body";
+import Body from "./components/body/bodyComponents/body";
 import Header from "./components/header/header";
 import { PokemonProvider } from "./context/PokemonContext/PokemonProvider";
 
