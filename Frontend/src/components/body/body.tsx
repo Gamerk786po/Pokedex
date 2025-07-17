@@ -136,7 +136,6 @@ const Body = () => {
         types: (data.types as PokemonTypes[]).map((t) => t.type.name),
         stats: (data.stats as PokemonStats[]).map((s) => ({
           base_stat: s.base_stat,
-          effort: s.effort,
           stat: s.stat.name,
         })),
         moves: (data.moves as PokemonMoves[]).map((m) => ({
