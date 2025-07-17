@@ -15,7 +15,6 @@ export interface ClickedPokemonInterface {
   // Stats
   stats: {
     base_stat: number;
-    effort: number;
     stat: string;
   }[];
   // Moves

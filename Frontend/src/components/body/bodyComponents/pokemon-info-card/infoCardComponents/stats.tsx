@@ -1,5 +1,4 @@
 import { usePokemon } from "../../../../../context/PokemonContext/usePokemon";
-import { motion } from "framer-motion";
 
 // The component for stats
 const Stats = () => {
@@ -9,7 +8,7 @@ const Stats = () => {
     : 0;
   return (
     <>
-      <motion.div className="mx-13 my-6">
+      <div className="mx-13 my-6">
         <h2 className="text-xl font-bold mb-4">Base Stats</h2>
         {/* Container containing all rows */}
         <div className="flex flex-col gap-3">
@@ -43,7 +42,7 @@ const Stats = () => {
             <p>{totalStats}</p>
           </span>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 };
