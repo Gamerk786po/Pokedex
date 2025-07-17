@@ -1,4 +1,5 @@
-import { usePokemon } from "../../../../context/PokemonContext/usePokemon";
+import { usePokemon } from "../../../../../context/PokemonContext/usePokemon";
+
 
 // 1. Mapping types to Tailwind BG colors
 const typeColors: Record<string, string> = {
@@ -28,10 +29,10 @@ const PhysicalInfo = () => {
   const { clickedPokemon } = usePokemon();
   return (
     // The container containing physical info of pokemons
-    <div className="flex flex-col md:flex-row gap-5 md:gap-20 justify-center items-center">
+    <div className="flex flex-col md:flex-row gap-5 md:gap-15 justify-center items-center">
       {/* The div containing text info */}
       <div className="flex flex-col justify-center items-center gap-2">
-        <h1 className="font-bold text-3xl md:text-4xl xl:text-5xl capitalize tracking-wide">
+        <h1 className="font-bold font-pokemon text-3xl md:text-4xl xl:text-5xl capitalize tracking-wide">
           {clickedPokemon?.name}
         </h1>
         {/* The div containing types of pokemons */}
@@ -40,7 +41,8 @@ const PhysicalInfo = () => {
             const bgColor = typeColors[t] || "bg-gray-300";
             return (
               <div
-                className={`${bgColor} py-1 px-4 rounded-xl capitalize text-white font-bold text-[15px] md:text-[17px] xl:text-[19px]`}
+                className={`${bgColor} py-1 px-4 rounded-xl capitalize text-white font-bold text-[15px] md:text-[17px] xl:text-[19px]
+              transition-transform duration-300 ease-in-out lg:hover:scale-105`}
                 key={t}
               >
                 <label>{t}</label>
@@ -69,12 +71,12 @@ const PhysicalInfo = () => {
         </div>
       </div>
       {/* The div containing the img of the pokemon */}
-      <div>
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${clickedPokemon?.id}.png`}
-          className="h-[10rem] md:h-[14rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)]"
+          loading="lazy"
+          className="md:h-[14rem] lg:h-[16rem] lg:w-[16rem] drop-shadow-xl/50 h-[224px] w-[224px]
+      transition-transform duration-300 ease-in-out lg:hover:scale-105 hover:cursor-pointer"
         ></img>
-      </div>
     </div>
   );
 };

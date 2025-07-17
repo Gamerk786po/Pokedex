@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 @import "tailwindcss";
 /* The body styling for permanently showing scroll bar in the side */
 body {
@@ -21,6 +22,9 @@ body {
 
 /* Step 3: Create custom utility class using @layer */
 @layer utilities {
+  .font-pokemon {
+    font-family: 'Poppins', sans-serif;
+  }
   .animate-electric {
     animation: electric 2s ease-in-out infinite;
   }
