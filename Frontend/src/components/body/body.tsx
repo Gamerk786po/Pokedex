@@ -6,6 +6,8 @@ import LoadingScreen from "./bodyComponents/loadingScreen";
 import ErrorScreen from "./bodyComponents/errorScreen";
 import { usePokemon } from "../../context/PokemonContext/usePokemon";
 import InfoCard from "./bodyComponents/pokemon-info-card/infocard";
+import { useSpecies } from "../../context/SpeciesContext/useSpecies";
+import { useEvolutions } from "../../context/EvolutionsContext/useEvolutions";
 
 // Interface for the 20 got pokemons
 interface PokemonsInterface {
@@ -43,6 +45,7 @@ interface PokemonMoves {
     };
   }[];
 }
+// Interface for Pokemon abilities
 interface PokemonAbilities {
   ability: {
     name: string;
@@ -50,6 +53,54 @@ interface PokemonAbilities {
   };
   is_hidden: boolean;
   slot: number;
+}
+
+// Interface for Pokemon egg_groups
+interface PokemonEggGroups {
+  name: string;
+  url: string;
+}
+
+// Interface for Pokemon Varieties
+interface PokemonVarieties {
+  is_default: boolean;
+  pokemon: {
+    name: string;
+    url: string;
+  };
+}
+
+// Interface for RawEvolutionChain
+interface RawEvolutionChain {
+  species: {
+    name: string;
+  };
+  evolution_details: {
+    min_level: number | null;
+    min_happiness: number | null;
+    held_item: { name: string } | null;
+    time_of_day: string;
+    item: { name: string } | null;
+    trigger: { name: string } | null;
+  }[];
+  evolves_to?: RawEvolutionChain[];
+}
+
+// Interface for Evo Details
+interface EvolutionDetails {
+  min_level: number | null;
+  min_happiness: number | null;
+  held_item: string | null;
+  time_of_day: string;
+  item: string | null;
+  trigger: string | null;
+}
+
+// Interface for Pokemon Evolutions
+interface PokemonEvolutionsInterface {
+  name: string;
+  evo_details: EvolutionDetails;
+  evolves_to: PokemonEvolutionsInterface[]; // Recursive branching support
 }
 
 // The component for body
@@ -74,7 +125,7 @@ const Body = () => {
   // Is pokemon card clicked
   const [isCardClick, setIsCardClick] = useState<boolean>(false);
 
-  // api of clicked pokemon
+  // API of clicked pokemon
   const [pokemonApi, setpokemonApi] = useState<string>("");
 
   /* 
@@ -82,6 +133,14 @@ const Body = () => {
   UsePokemon for PokemonContext
   */
   const { setClickedPokemon } = usePokemon();
+  /*
+ useSpecies for PokemonSpeciesContext
+  */
+  const { setPokemonSpecies } = useSpecies();
+  /*
+ useSpecies for PokemonSpeciesContext
+ */
+  const { setPokemonEvolutions } = useEvolutions();
   // Functions
 
   // The function for api call of 20 pokemons in pagination.
@@ -114,6 +173,60 @@ const Body = () => {
     // setIsLoading(true) // enable this after making the process of getting data.
     setpokemonApi(api);
     setIsCardClick(true);
+  };
+
+  // The function for API call of the Evolutions of the clickedpokemon
+  const getEvolutionsData = async (url: string) => {
+    const res = await fetch(url);
+    const data = await res.json();
+    const formatData = (
+      chain: RawEvolutionChain
+    ): PokemonEvolutionsInterface => {
+      const name = chain.species.name;
+      const details =
+        chain.evolution_details && chain.evolution_details.length > 0
+          ? chain.evolution_details
+          : null;
+      const evo_details = {
+        min_level: details?.[0].min_level ?? null,
+        min_happiness: details?.[0].min_happiness ?? null,
+        held_item: details?.[0].held_item?.name ?? null,
+        time_of_day: details?.[0].time_of_day ?? "",
+        item: details?.[0].item?.name ?? null,
+        trigger: details?.[0].trigger?.name ?? null,
+      };
+      const evolves_to = chain.evolves_to?.length
+        ? chain.evolves_to.map((evo: RawEvolutionChain) => formatData(evo))
+        : [];
+      return {
+        name,
+        evo_details,
+        evolves_to,
+      };
+    };
+    const formatedEvolutions = formatData(data.chain);
+    console.log(JSON.stringify(formatedEvolutions, null, 2));
+    setPokemonEvolutions(formatedEvolutions);
+  };
+
+  // The function for API Call of species data of clickedPokemon
+  const getSpeciesData = async () => {
+    const id = pokemonApi.split("/")[6]; // extracting id from url
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
+    const data = await res.json();
+    const pokemonSpecies = {
+      egg_groups: (data.egg_groups as PokemonEggGroups[]).map((egg_group) => ({
+        name: egg_group.name,
+      })),
+      evolution_chain_url: data.evolution_chain.url,
+      flavor_text: data.flavor_text_entries[0].flavor_text,
+      varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
+        name: variety.pokemon.name,
+        url: variety.pokemon.url,
+      })),
+    };
+    setPokemonSpecies(pokemonSpecies);
+    await getEvolutionsData(pokemonSpecies.evolution_chain_url);
   };
 
   // The function for API call  of the clicked pokemon data
@@ -155,6 +268,7 @@ const Body = () => {
         })),
       };
       setClickedPokemon(pokemonData); // setting the clickedPokemon data
+      await getSpeciesData();
       setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
     } catch (err: unknown) {
       // Error handling
