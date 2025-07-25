@@ -70,6 +70,19 @@ interface PokemonVarieties {
   };
 }
 
+// Interface for Pokemon Flavour-Text-Interies
+interface FlavourTextEnteries {
+  flavor_text: string;
+  language: {
+    name: string;
+    url: string;
+  };
+  version: {
+    name: string;
+    url: string;
+  };
+}
+
 // Interface for RawEvolutionChain
 interface RawEvolutionChain {
   species: {
@@ -219,7 +232,10 @@ const Body = () => {
         name: egg_group.name,
       })),
       evolution_chain_url: data.evolution_chain.url,
-      flavor_text: data.flavor_text_entries[0].flavor_text,
+      flavor_text:
+        (data.flavor_text_entries as FlavourTextEnteries[]).find(
+          (entry) => entry.language.name === "en"
+        )?.flavor_text || "",
       varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
         name: variety.pokemon.name,
         url: variety.pokemon.url,
