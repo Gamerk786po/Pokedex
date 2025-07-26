@@ -87,6 +87,7 @@ interface FlavourTextEnteries {
 interface RawEvolutionChain {
   species: {
     name: string;
+    url: string;
   };
   evolution_details: {
     min_level: number | null;
@@ -110,8 +111,9 @@ interface EvolutionDetails {
 }
 
 // Interface for Pokemon Evolutions
-interface PokemonEvolutionsInterface {
+export  interface PokemonEvolutionsInterface {
   name: string;
+  url: string;
   evo_details: EvolutionDetails;
   evolves_to: PokemonEvolutionsInterface[]; // Recursive branching support
 }
@@ -196,6 +198,7 @@ const Body = () => {
       chain: RawEvolutionChain
     ): PokemonEvolutionsInterface => {
       const name = chain.species.name;
+      const url = chain.species.url;
       const details =
         chain.evolution_details && chain.evolution_details.length > 0
           ? chain.evolution_details
@@ -213,12 +216,12 @@ const Body = () => {
         : [];
       return {
         name,
+        url,
         evo_details,
         evolves_to,
       };
     };
     const formatedEvolutions = formatData(data.chain);
-    console.log(JSON.stringify(formatedEvolutions, null, 2));
     setPokemonEvolutions(formatedEvolutions);
   };
 

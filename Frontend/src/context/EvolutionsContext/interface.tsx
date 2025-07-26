@@ -13,6 +13,7 @@ export interface EvolutionDetails{
 // Interface for PokemonEvolutions
 export interface PokemonEvolutionsInterface {
     name: string;
+    url: string;
     evo_details: EvolutionDetails;
     evolves_to: PokemonEvolutionsInterface[];
 }

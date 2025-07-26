@@ -50,7 +50,7 @@ const PhysicalInfo = () => {
           key={clickedPokemon?.id}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1 className="font-bold font-pokemon text-3xl md:text-4xl xl:text-5xl capitalize tracking-wide">
+          <h1 className="font-bold font-pokemon text-3xl md:text-4xl capitalize tracking-wide">
             {clickedPokemon?.name}
           </h1>
 
@@ -97,7 +97,7 @@ const PhysicalInfo = () => {
           {/* The container for egg groups */}
           <div className="flex flex-row justify-between items-center gap-13">
             {pokemonSpecies?.egg_groups.map((egg_group) => (
-              <div className="flex flex-col">
+              <div className="flex flex-col" key={egg_group.name}>
                 <p className="font-bold text-[19px] xl:text-[22px] capitalize">
                   {egg_group.name}
                 </p>
