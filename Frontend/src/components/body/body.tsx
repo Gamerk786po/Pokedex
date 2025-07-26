@@ -101,7 +101,7 @@ interface RawEvolutionChain {
 }
 
 // Interface for Evo Details
-interface EvolutionDetails {
+export interface EvolutionDetails {
   min_level: number | null;
   min_happiness: number | null;
   held_item: string | null;

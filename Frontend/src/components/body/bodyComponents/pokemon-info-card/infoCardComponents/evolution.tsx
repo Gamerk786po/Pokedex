@@ -47,7 +47,7 @@ const Evolution: React.FC<EvolutionProps> = ({ id, name, evoDetails }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: imgLoaded ? 1 : 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="h-[8rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
+          className="h-[5rem] md:h-[7rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
         />
         {!imgLoaded && (
           <div className="h-[8rem] w-[8rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>

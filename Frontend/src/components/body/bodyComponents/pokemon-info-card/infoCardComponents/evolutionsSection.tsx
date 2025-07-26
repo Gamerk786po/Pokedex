@@ -8,7 +8,7 @@ const renderEvolutions = (evolution: PokemonEvolutionsInterface | null) => {
   const currentId = Number(evolution.url.split("/")[6]);
 
   return (
-    <div className="flex flex-row items-center my-4">
+    <div className="flex flex-col md:flex-row items-center my-4">
       {/* Current Evolution */}
       <Evolution
         key={currentId}
@@ -19,7 +19,7 @@ const renderEvolutions = (evolution: PokemonEvolutionsInterface | null) => {
 
       {/* Next Evolutions - show branches in a col */}
       {evolution.evolves_to.length > 0 && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-row md:flex-col gap-6 flex-wrap justify-center">
           {evolution.evolves_to.map((nextEvo, index) => (
             <div key={index}>{renderEvolutions(nextEvo)}</div>
           ))}
