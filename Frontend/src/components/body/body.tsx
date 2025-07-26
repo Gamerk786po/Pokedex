@@ -235,7 +235,7 @@ const Body = () => {
       flavor_text:
         (data.flavor_text_entries as FlavourTextEnteries[]).find(
           (entry) => entry.language.name === "en"
-        )?.flavor_text || "",
+        )?.flavor_text.replace(/[\n\f]/g, " ") || "",
       varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
         name: variety.pokemon.name,
         url: variety.pokemon.url,
