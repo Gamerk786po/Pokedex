@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import Stats from "./infoCardComponents/stats";
 import Abilities from "./infoCardComponents/abilities";
 import EvolutionSection from "./infoCardComponents/evolutionsSection";
+import Varieties from "./infoCardComponents/varieties";
 
 const PhysicalInfo = lazy(() => import("./infoCardComponents/physicalInfo"));
 
@@ -18,6 +19,7 @@ const InfoCard = () => {
           <Stats />
           <Abilities />
           <EvolutionSection />
+          <Varieties />
         </Suspense>
       </div>
     </motion.div>
