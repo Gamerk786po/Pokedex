@@ -52,7 +52,7 @@ const Evolution: React.FC<EvolutionProps> = ({ id, name, evoDetails }) => {
         {!imgLoaded && (
           <div className="h-[8rem] w-[8rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>
         )}
-        <p className="font-medium mt-2">{name}</p>
+        <p className="font-medium mt-2 capitalize">{name}</p>
       </div>
     </>
   );

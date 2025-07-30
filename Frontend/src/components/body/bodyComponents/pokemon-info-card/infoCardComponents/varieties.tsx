@@ -7,14 +7,14 @@ const Varieties = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
   return (
     <>
-    <h2 className="font-medium text-xl ml-8 my-1 md:my-5">Alternate Forms</h2>
+    <h2 className="font-bold text-xl ml-8 my-1 md:my-5">Alternate Forms</h2>
     {/* Container for all alternate form */}
     <div className="flex flex-wrap justify-center items-center mx-5 gap-8">
       {pokemonSpecies?.varieties.map((variety) => {
         const id = variety.url.split("/")[6];
         return (
           // Container for each Variety
-          <div id={id} className="flex flex-col items-center justify-center">
+          <div key={id} id={id} className="flex flex-col items-center justify-center">
             <motion.img
               key={id}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}

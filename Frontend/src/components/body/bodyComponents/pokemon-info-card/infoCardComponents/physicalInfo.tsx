@@ -128,7 +128,7 @@ const PhysicalInfo = () => {
       </div>
       {/* Pokedex entry flavour text  */}
       <div className="flex flex-col mx-12 mt-5 justify-center">
-        <p className="leading-relaxed">{pokemonSpecies?.flavor_text}</p>
+        <p className="leading-relaxed text-center">{pokemonSpecies?.flavor_text}</p>
       </div>
     </>
   );
