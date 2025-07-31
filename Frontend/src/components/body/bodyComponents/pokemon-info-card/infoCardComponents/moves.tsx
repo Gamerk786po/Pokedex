@@ -25,7 +25,6 @@ const MovesSection = () => {
   const eggMoves = clickedPokemon?.moves.filter(
     (move) => move.move_learn_method === "egg"
   );
-  console.log(eggMoves);
   return (
     <>
       <h2 className="font-bold text-xl ml-8 my-1 md:my-5">Moves</h2>
@@ -38,6 +37,7 @@ const MovesSection = () => {
             {levelingMoves?.map((move) => {
               return (
                 <Move
+                  key={move.move.name}
                   name={move.move.name}
                   url={move.move.url}
                   learned_at_level={move.level_learned_at}
@@ -54,6 +54,7 @@ const MovesSection = () => {
             {machineMoves?.map((move) => {
               return (
                 <Move
+                  key={move.move.name}
                   name={move.move.name}
                   url={move.move.url}
                   learned_at_level={move.level_learned_at}
@@ -70,6 +71,7 @@ const MovesSection = () => {
             {tutorMoves?.map((move) => {
               return (
                 <Move
+                  key={move.move.name}
                   name={move.move.name}
                   url={move.move.url}
                   learned_at_level={move.level_learned_at}
@@ -86,6 +88,7 @@ const MovesSection = () => {
             {eggMoves?.map((move) => {
               return (
                 <Move
+                  key={move.move.name}
                   name={move.move.name}
                   url={move.move.url}
                   learned_at_level={move.level_learned_at}
