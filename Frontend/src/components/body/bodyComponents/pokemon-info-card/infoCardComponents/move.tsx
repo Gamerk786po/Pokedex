@@ -43,6 +43,28 @@ interface EffectEntries {
   short_effect: string;
 }
 
+// Mapping Pokémon types to Tailwind background colors
+const typeColors: Record<string, string> = {
+  normal: "bg-gray-400",
+  fire: "bg-red-500",
+  water: "bg-blue-500",
+  grass: "bg-green-500",
+  electric: "bg-yellow-400 text-black",
+  ice: "bg-blue-200 text-black",
+  fighting: "bg-red-700",
+  poison: "bg-purple-600",
+  ground: "bg-yellow-700",
+  flying: "bg-sky-400",
+  psychic: "bg-pink-500",
+  bug: "bg-lime-500",
+  rock: "bg-yellow-800",
+  ghost: "bg-indigo-700",
+  dark: "bg-gray-800",
+  dragon: "bg-indigo-600",
+  steel: "bg-gray-500",
+  fairy: "bg-pink-300 text-black",
+};
+
 // Reuseable component for moves
 const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
   // State for detail On or off
@@ -82,6 +104,10 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
       setIsFetched(false);
     }
   }, [isDetail]);
+
+  const type = detail?.type ?? "";
+  const typeClass = typeColors[type] || "bg-gray-300";
+
   return (
     // Container for each move
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-2 px-4 py-3 border-b relative">
@@ -98,10 +124,66 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
       >
         Details
       </button>
-      {isDetail && (
-        // Container for details of the move
-        <motion.div className="absolute">
-          <p>HEllo</p>
+      {isDetail && detail && isFetched && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="col-span-2 sm:col-span-4 bg-gray-200 rounded-lg p-4 mt-2 shadow-md justify-center"
+        >
+          {/* Container for Accuracy, power and pp */}
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center gap-4 sm:gap-10 text-center">
+            <p className="sm:basis-1/4">
+              <span className="font-medium">Accuracy:</span>{" "}
+              {detail.accuracy ?? "N/A"}
+            </p>
+            <p className="sm:basis-1/4">
+              <span className="font-medium">Power:</span>{" "}
+              {detail.power ?? "N/A"}
+            </p>
+            <p className="sm:basis-1/4">
+              <span className="font-medium">PP:</span> {detail.pp}
+            </p>
+          </div>
+          {/* Effect of the move */}
+          <div className="flex justify-center mt-4">
+            <p className="text-center">{detail.effect}</p>
+          </div>
+          {/* Stat changes */}
+          {detail.stat_changes.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2 text-center">
+                📊 Stat Changes
+              </h3>
+              <ul className="space-y-2">
+                {detail.stat_changes.map((statChange, index) => (
+                  <li
+                    key={index}
+                    className={`flex justify-between px-4 py-2 rounded-lg shadow ${
+                      statChange.change > 0
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    <span className="capitalize">{statChange.name}</span>
+                    <span>
+                      {statChange.change > 0 ? "+" : ""}
+                      {statChange.change}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+         {/* Typing */}
+          <div className="flex justify-center mt-6">
+            <span
+              className={`px-4 py-1 rounded-full font-semibold capitalize shadow ${typeClass}`}
+            >
+              {type}
+            </span>
+          </div>
         </motion.div>
       )}
     </div>
