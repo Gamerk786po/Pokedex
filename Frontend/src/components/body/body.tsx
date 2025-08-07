@@ -286,6 +286,7 @@ const Body = () => {
           is_hidden: a.is_hidden,
         })),
       };
+      
       setClickedPokemon(pokemonData); // setting the clickedPokemon data
       await getSpeciesData();
       setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
