@@ -25,10 +25,17 @@ const Abilities = () => {
   const getAbility = async (url: string) => {
     try {
       const res = await fetch(url);
+  
+      if (!res.ok) {
+        throw new Error(`Failed to fetch ability: ${res.status}`);
+      }
+  
       const data = await res.json();
+  
       const abilityEntry = data.effect_entries.find(
         (entry: AbilityInterface) => entry.language.name === "en"
       );
+  
       setAbility(abilityEntry);
     } catch (err) {
       console.error("Failed to fetch ability:", err);

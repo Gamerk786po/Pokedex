@@ -76,25 +76,37 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
 
   // Geting details for moves on click
   const getMoveDetails = async () => {
-    const res = await fetch(url);
-    const data = await res.json();
-    const formatedData = {
-      effect:
-        (data.effect_entries as EffectEntries[]).find(
-          (entry) => entry.language.name === "en"
-        )?.effect ?? "No effect found",
-      accuracy: data?.accuracy ?? null,
-      power: data?.power ?? null,
-      pp: data.pp,
-      stat_changes: (data.stat_changes as StatChange[]).map((stat_change) => ({
-        change: stat_change.change,
-        name: stat_change.stat.name,
-      })),
-      type: data.type.name,
-    };
-    setDetail(formatedData);
-    setIsFetched(true);
+    try {
+      const res = await fetch(url);
+  
+      if (!res.ok) {
+        throw new Error(`Failed to fetch move details: ${res.status}`);
+      }
+  
+      const data = await res.json();
+  
+      const formatedData = {
+        effect:
+          (data.effect_entries as EffectEntries[]).find(
+            (entry) => entry.language.name === "en"
+          )?.effect ?? "No effect found",
+        accuracy: data?.accuracy ?? null,
+        power: data?.power ?? null,
+        pp: data.pp,
+        stat_changes: (data.stat_changes as StatChange[]).map((stat_change) => ({
+          change: stat_change.change,
+          name: stat_change.stat.name,
+        })),
+        type: data.type.name,
+      };
+  
+      setDetail(formatedData);
+      setIsFetched(true);
+    } catch (err) {
+      console.error("Failed to fetch move details:", err);
+    }
   };
+  
 
   // useEffect when isDetail is changed
   useEffect(() => {
