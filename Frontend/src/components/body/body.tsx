@@ -205,60 +205,86 @@ const Body = () => {
 
   // The function for API call of the Evolutions of the clickedpokemon
   const getEvolutionsData = async (url: string) => {
-    const res = await fetch(url);
-    const data = await res.json();
-    const formatData = (
-      chain: RawEvolutionChain
-    ): PokemonEvolutionsInterface => {
-      const name = chain.species.name;
-      const url = chain.species.url;
-      const details =
-        chain.evolution_details && chain.evolution_details.length > 0
-          ? chain.evolution_details
-          : null;
-      const evo_details = {
-        min_level: details?.[0].min_level ?? null,
-        min_happiness: details?.[0].min_happiness ?? null,
-        held_item: details?.[0].held_item?.name ?? null,
-        time_of_day: details?.[0].time_of_day ?? "",
-        item: details?.[0].item?.name ?? null,
-        trigger: details?.[0].trigger?.name ?? null,
+    try {
+      const res = await fetch(url);
+  
+      if (!res.ok) {
+        throw new Error(`Failed to fetch evolutions data: ${res.status}`);
+      }
+  
+      const data = await res.json();
+  
+      const formatData = (
+        chain: RawEvolutionChain
+      ): PokemonEvolutionsInterface => {
+        const name = chain.species.name;
+        const url = chain.species.url;
+  
+        const details =
+          chain.evolution_details && chain.evolution_details.length > 0
+            ? chain.evolution_details
+            : null;
+  
+        const evo_details = {
+          min_level: details?.[0].min_level ?? null,
+          min_happiness: details?.[0].min_happiness ?? null,
+          held_item: details?.[0].held_item?.name ?? null,
+          time_of_day: details?.[0].time_of_day ?? "",
+          item: details?.[0].item?.name ?? null,
+          trigger: details?.[0].trigger?.name ?? null,
+        };
+  
+        const evolves_to = chain.evolves_to?.length
+          ? chain.evolves_to.map((evo: RawEvolutionChain) => formatData(evo))
+          : [];
+  
+        return {
+          name,
+          url,
+          evo_details,
+          evolves_to,
+        };
       };
-      const evolves_to = chain.evolves_to?.length
-        ? chain.evolves_to.map((evo: RawEvolutionChain) => formatData(evo))
-        : [];
-      return {
-        name,
-        url,
-        evo_details,
-        evolves_to,
-      };
-    };
-    const formatedEvolutions = formatData(data.chain);
-    setPokemonEvolutions(formatedEvolutions);
+  
+      const formatedEvolutions = formatData(data.chain);
+      setPokemonEvolutions(formatedEvolutions);
+    } catch (error) {
+      console.error("Error fetching evolutions data:", error);
+    }
   };
 
   // The function for API Call of species data of clickedPokemon
   const getSpeciesData = async () => {
-    const id = pokemonApi.split("/")[6]; // extracting id from url
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
-    const data = await res.json();
-    const pokemonSpecies = {
-      egg_groups: (data.egg_groups as PokemonEggGroups[]).map((egg_group) => ({
-        name: egg_group.name,
-      })),
-      evolution_chain_url: data.evolution_chain.url,
-      flavor_text:
-        (data.flavor_text_entries as FlavourTextEnteries[])
-          .find((entry) => entry.language.name === "en")
-          ?.flavor_text.replace(/[\n\f]/g, " ") || "",
-      varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
-        name: variety.pokemon.name,
-        url: variety.pokemon.url,
-      })),
-    };
-    setPokemonSpecies(pokemonSpecies);
-    await getEvolutionsData(pokemonSpecies.evolution_chain_url);
+    try {
+      const id = pokemonApi.split("/")[6]; // extracting id from url
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
+      
+      if (!res.ok) {
+        throw new Error(`Failed to fetch species data: ${res.status}`);
+      }
+  
+      const data = await res.json();
+  
+      const pokemonSpecies = {
+        egg_groups: (data.egg_groups as PokemonEggGroups[]).map((egg_group) => ({
+          name: egg_group.name,
+        })),
+        evolution_chain_url: data.evolution_chain.url,
+        flavor_text:
+          (data.flavor_text_entries as FlavourTextEnteries[])
+            .find((entry) => entry.language.name === "en")
+            ?.flavor_text.replace(/[\n\f]/g, " ") || "",
+        varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
+          name: variety.pokemon.name,
+          url: variety.pokemon.url,
+        })),
+      };
+  
+      setPokemonSpecies(pokemonSpecies);
+      await getEvolutionsData(pokemonSpecies.evolution_chain_url);
+    } catch (error) {
+      console.error("Error fetching species data:", error);
+    }
   };
 
   // The function for API Call for types effectiveness of clickedPokemon
@@ -283,38 +309,51 @@ const Body = () => {
       steel: 1,
       fairy: 1,
     };
-    const results = await Promise.all(
-      typeUrls.map((url) => fetch(url).then((res) => res.json()))
-    );
-    results.forEach((data) => {
-      const damage_relations = data.damage_relations;
-      // calculation of type effectiveness
-
-      // mul by 2 on double damage from
-      damage_relations.double_damage_from.forEach(
-        (type: PokemonDamageRelations) => {
-          const name = type.name as PokemonType;
-          typings[name] *= 2;
-        }
+  
+    try {
+      const results = await Promise.all(
+        typeUrls.map(async (url) => {
+          const res = await fetch(url);
+          if (!res.ok) {
+            throw new Error(`Failed to fetch ${url}: ${res.status}`);
+          }
+          return res.json();
+        })
       );
-
-      // mul by 0.5 on half damage from
-      damage_relations.half_damage_from.forEach(
-        (type: PokemonDamageRelations) => {
-          const name = type.name as PokemonType;
-          typings[name] *= 0.5;
-        }
-      );
-
-      // mul by 0 on no damage from
-      damage_relations.no_damage_from.forEach(
-        (type: PokemonDamageRelations) => {
-          const name = type.name as PokemonType;
-          typings[name] *= 0;
-        }
-      );
-    });
-    setPokemonEffectiveness(typings);
+  
+      results.forEach((data) => {
+        const damage_relations = data.damage_relations;
+        // calculation of type effectiveness
+  
+        // mul by 2 on double damage from
+        damage_relations.double_damage_from.forEach(
+          (type: PokemonDamageRelations) => {
+            const name = type.name as PokemonType;
+            typings[name] *= 2;
+          }
+        );
+  
+        // mul by 0.5 on half damage from
+        damage_relations.half_damage_from.forEach(
+          (type: PokemonDamageRelations) => {
+            const name = type.name as PokemonType;
+            typings[name] *= 0.5;
+          }
+        );
+  
+        // mul by 0 on no damage from
+        damage_relations.no_damage_from.forEach(
+          (type: PokemonDamageRelations) => {
+            const name = type.name as PokemonType;
+            typings[name] *= 0;
+          }
+        );
+      });
+  
+      setPokemonEffectiveness(typings);
+    } catch (error) {
+      console.error("Error fetching effectiveness data:", error);
+    }
   };
   // The function for API call  of the clicked pokemon data
   const getPokemonInfo = async () => {
