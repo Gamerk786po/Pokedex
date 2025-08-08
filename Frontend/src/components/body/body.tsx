@@ -8,6 +8,11 @@ import { usePokemon } from "../../context/PokemonContext/usePokemon";
 import InfoCard from "./bodyComponents/pokemon-info-card/infocard";
 import { useSpecies } from "../../context/SpeciesContext/useSpecies";
 import { useEvolutions } from "../../context/EvolutionsContext/useEvolutions";
+import { useEffectiveness } from "../../context/EffectivenessContext/useEffectiveness";
+import {
+  EffectivenessInterface,
+  PokemonType,
+} from "../../context/EffectivenessContext/interface";
 
 // Interface for the 20 got pokemons
 interface PokemonsInterface {
@@ -111,13 +116,17 @@ export interface EvolutionDetails {
 }
 
 // Interface for Pokemon Evolutions
-export  interface PokemonEvolutionsInterface {
+export interface PokemonEvolutionsInterface {
   name: string;
   url: string;
   evo_details: EvolutionDetails;
   evolves_to: PokemonEvolutionsInterface[]; // Recursive branching support
 }
 
+interface PokemonDamageRelations {
+  name: string;
+  url: string;
+}
 // The component for body
 const Body = () => {
   // State managements:+
@@ -153,9 +162,13 @@ const Body = () => {
   */
   const { setPokemonSpecies } = useSpecies();
   /*
- useSpecies for PokemonSpeciesContext
+ useSpecies from PokemonSpeciesContext
  */
   const { setPokemonEvolutions } = useEvolutions();
+  /*
+  useEffectiveness for pokemonEffectivenessContext
+   */
+  const { setPokemonEffectiveness } = useEffectiveness();
   // Functions
 
   // The function for api call of 20 pokemons in pagination.
@@ -236,9 +249,9 @@ const Body = () => {
       })),
       evolution_chain_url: data.evolution_chain.url,
       flavor_text:
-        (data.flavor_text_entries as FlavourTextEnteries[]).find(
-          (entry) => entry.language.name === "en"
-        )?.flavor_text.replace(/[\n\f]/g, " ") || "",
+        (data.flavor_text_entries as FlavourTextEnteries[])
+          .find((entry) => entry.language.name === "en")
+          ?.flavor_text.replace(/[\n\f]/g, " ") || "",
       varieties: (data.varieties as PokemonVarieties[]).map((variety) => ({
         name: variety.pokemon.name,
         url: variety.pokemon.url,
@@ -248,6 +261,61 @@ const Body = () => {
     await getEvolutionsData(pokemonSpecies.evolution_chain_url);
   };
 
+  // The function for API Call for types effectiveness of clickedPokemon
+  const getEffectivenessData = async (typeUrls: string[]) => {
+    const typings: EffectivenessInterface = {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+    };
+    const results = await Promise.all(
+      typeUrls.map((url) => fetch(url).then((res) => res.json()))
+    );
+    results.forEach((data) => {
+      const damage_relations = data.damage_relations;
+      // calculation of type effectiveness
+
+      // mul by 2 on double damage from
+      damage_relations.double_damage_from.forEach(
+        (type: PokemonDamageRelations) => {
+          const name = type.name as PokemonType;
+          typings[name] *= 2;
+        }
+      );
+
+      // mul by 0.5 on half damage from
+      damage_relations.half_damage_from.forEach(
+        (type: PokemonDamageRelations) => {
+          const name = type.name as PokemonType;
+          typings[name] *= 0.5;
+        }
+      );
+
+      // mul by 0 on no damage from
+      damage_relations.no_damage_from.forEach(
+        (type: PokemonDamageRelations) => {
+          const name = type.name as PokemonType;
+          typings[name] *= 0;
+        }
+      );
+    });
+    setPokemonEffectiveness(typings);
+  };
   // The function for API call  of the clicked pokemon data
   const getPokemonInfo = async () => {
     try {
@@ -286,9 +354,10 @@ const Body = () => {
           is_hidden: a.is_hidden,
         })),
       };
-      
       setClickedPokemon(pokemonData); // setting the clickedPokemon data
+      const typeUrls = (data.types as PokemonTypes[]).map((t) => t.type.url); // Getting Types urls
       await getSpeciesData();
+      await getEffectivenessData(typeUrls);
       setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
     } catch (err: unknown) {
       // Error handling

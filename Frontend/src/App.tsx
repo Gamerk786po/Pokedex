@@ -1,5 +1,6 @@
 import Body from "./components/body/body";
 import Header from "./components/header/header";
+import { PokemonEffectivenessProvider } from "./context/EffectivenessContext/EffectivnessProvider";
 import { PokemonEvolutionsProvider } from "./context/EvolutionsContext/EvolutionsProvider";
 import { PokemonProvider } from "./context/PokemonContext/PokemonProvider";
 import { PokemonSpeciesProvider } from "./context/SpeciesContext/SpeciesProvider";
@@ -16,11 +17,13 @@ function App() {
          clicked pokemons
           */}
         <PokemonProvider>
-          <PokemonSpeciesProvider>
-            <PokemonEvolutionsProvider>
-              <Body />
-            </PokemonEvolutionsProvider>
-          </PokemonSpeciesProvider>
+          <PokemonEffectivenessProvider>
+            <PokemonSpeciesProvider>
+              <PokemonEvolutionsProvider>
+                <Body />
+              </PokemonEvolutionsProvider>
+            </PokemonSpeciesProvider>
+          </PokemonEffectivenessProvider>
         </PokemonProvider>
       </div>
     </>

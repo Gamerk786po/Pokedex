@@ -1,21 +1,23 @@
-// Interface for TypeEffectiveness
-export interface Effectiveness {
-    double_damage_from: {
-        name: string,
-    }[];
-    double_damage_to: {
-        name: string,
-    }[];
-    half_damage_from: {
-        name: string,
-    }[];
-    half_damage_to:{
-        name: string
-    }[];
-    no_damage_from:{
-        name: string,
-    };
-    no_damage_to:{
-        name: string
-    }[];
-}
+export type PokemonType =
+  | "normal"
+  | "fire"
+  | "water"
+  | "electric"
+  | "grass"
+  | "ice"
+  | "fighting"
+  | "poison"
+  | "ground"
+  | "flying"
+  | "psychic"
+  | "bug"
+  | "rock"
+  | "ghost"
+  | "dragon"
+  | "dark"
+  | "steel"
+  | "fairy";
+
+export type EffectivenessInterface = {
+  [key in PokemonType]: number;
+};
