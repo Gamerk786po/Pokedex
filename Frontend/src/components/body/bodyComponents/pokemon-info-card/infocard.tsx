@@ -5,6 +5,7 @@ import Abilities from "./infoCardComponents/abilities";
 import EvolutionSection from "./infoCardComponents/evolutionsSection";
 import Varieties from "./infoCardComponents/varieties";
 import MovesSection from "./infoCardComponents/moves";
+import TypeEffectiveness from "./infoCardComponents/typeEffectiveness";
 
 const PhysicalInfo = lazy(() => import("./infoCardComponents/physicalInfo"));
 
@@ -21,6 +22,7 @@ const InfoCard = () => {
           <Abilities />
           <EvolutionSection />
           <Varieties />
+          < TypeEffectiveness />
           <MovesSection />
         </Suspense>
       </div>

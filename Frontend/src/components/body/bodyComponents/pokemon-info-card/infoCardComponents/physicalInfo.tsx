@@ -5,7 +5,7 @@ import { useSpecies } from "../../../../../context/SpeciesContext/useSpecies";
 
 // Mapping Pokémon types to Tailwind background colors
 const typeColors: Record<string, string> = {
-  normal: "bg-gray-400",
+  normal: "0bg-gray-400",
   fire: "bg-red-500",
   water: "bg-blue-500",
   grass: "bg-green-500",
