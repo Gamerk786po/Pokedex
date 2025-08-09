@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 const Card = lazy(() => import("./bodyComponents/card"));
-import { motion } from "framer-motion"; // for using framer motion
+import { motion, AnimatePresence } from "framer-motion"; // for using framer motion
 import PaginationButton from "./bodyComponents/Pagination-button";
 import LoadingScreen from "./bodyComponents/loadingScreen";
 import ErrorScreen from "./bodyComponents/errorScreen";
@@ -207,24 +207,24 @@ const Body = () => {
   const getEvolutionsData = async (url: string) => {
     try {
       const res = await fetch(url);
-  
+
       if (!res.ok) {
         throw new Error(`Failed to fetch evolutions data: ${res.status}`);
       }
-  
+
       const data = await res.json();
-  
+
       const formatData = (
         chain: RawEvolutionChain
       ): PokemonEvolutionsInterface => {
         const name = chain.species.name;
         const url = chain.species.url;
-  
+
         const details =
           chain.evolution_details && chain.evolution_details.length > 0
             ? chain.evolution_details
             : null;
-  
+
         const evo_details = {
           min_level: details?.[0].min_level ?? null,
           min_happiness: details?.[0].min_happiness ?? null,
@@ -233,11 +233,11 @@ const Body = () => {
           item: details?.[0].item?.name ?? null,
           trigger: details?.[0].trigger?.name ?? null,
         };
-  
+
         const evolves_to = chain.evolves_to?.length
           ? chain.evolves_to.map((evo: RawEvolutionChain) => formatData(evo))
           : [];
-  
+
         return {
           name,
           url,
@@ -245,7 +245,7 @@ const Body = () => {
           evolves_to,
         };
       };
-  
+
       const formatedEvolutions = formatData(data.chain);
       setPokemonEvolutions(formatedEvolutions);
     } catch (error) {
@@ -257,18 +257,22 @@ const Body = () => {
   const getSpeciesData = async () => {
     try {
       const id = pokemonApi.split("/")[6]; // extracting id from url
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
-      
+      const res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-species/${id}/`
+      );
+
       if (!res.ok) {
         throw new Error(`Failed to fetch species data: ${res.status}`);
       }
-  
+
       const data = await res.json();
-  
+
       const pokemonSpecies = {
-        egg_groups: (data.egg_groups as PokemonEggGroups[]).map((egg_group) => ({
-          name: egg_group.name,
-        })),
+        egg_groups: (data.egg_groups as PokemonEggGroups[]).map(
+          (egg_group) => ({
+            name: egg_group.name,
+          })
+        ),
         evolution_chain_url: data.evolution_chain.url,
         flavor_text:
           (data.flavor_text_entries as FlavourTextEnteries[])
@@ -279,7 +283,7 @@ const Body = () => {
           url: variety.pokemon.url,
         })),
       };
-  
+
       setPokemonSpecies(pokemonSpecies);
       await getEvolutionsData(pokemonSpecies.evolution_chain_url);
     } catch (error) {
@@ -309,7 +313,7 @@ const Body = () => {
       steel: 1,
       fairy: 1,
     };
-  
+
     try {
       const results = await Promise.all(
         typeUrls.map(async (url) => {
@@ -320,11 +324,11 @@ const Body = () => {
           return res.json();
         })
       );
-  
+
       results.forEach((data) => {
         const damage_relations = data.damage_relations;
         // calculation of type effectiveness
-  
+
         // mul by 2 on double damage from
         damage_relations.double_damage_from.forEach(
           (type: PokemonDamageRelations) => {
@@ -332,7 +336,7 @@ const Body = () => {
             typings[name] *= 2;
           }
         );
-  
+
         // mul by 0.5 on half damage from
         damage_relations.half_damage_from.forEach(
           (type: PokemonDamageRelations) => {
@@ -340,7 +344,7 @@ const Body = () => {
             typings[name] *= 0.5;
           }
         );
-  
+
         // mul by 0 on no damage from
         damage_relations.no_damage_from.forEach(
           (type: PokemonDamageRelations) => {
@@ -349,7 +353,7 @@ const Body = () => {
           }
         );
       });
-  
+
       setPokemonEffectiveness(typings);
     } catch (error) {
       console.error("Error fetching effectiveness data:", error);
@@ -435,55 +439,60 @@ const Body = () => {
       ) : (
         // The container for containing body components
         <Suspense fallback={<></>}>
-          {isCardClick ? (
-            <div className="flex justify-center items-center flex-wrap gap-15 mt-10 w-full">
-              <InfoCard />
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center">
-              {/* The div enclosing the deck of pokemons */}
-              <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
-                {pokemons.map((pokemon) => {
-                  const id = pokemon.url.split("/")[6]; // extracting id
-                  const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
-                  return (
-                    // The div enclosing each pokemon
-                    <motion.div
-                      className=""
-                      onClick={() => handleClick(pokemon.url)}
-                      initial={{ opacity: 0.2 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.9 }}
-                      key={pokemon.name}
-                    >
-                      <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
-                    </motion.div>
-                  );
-                })}
-              </div>
-              {/* The container for buttons for back, first page and next */}
-              <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
-                {/* The back button */}
-                <PaginationButton
-                  label="Back"
-                  disabled={offset === 0}
-                  onClick={() => setOffSet(offset - 20)}
-                />
-                {/* The first page button */}
-                <PaginationButton
-                  label="First-Page"
-                  disabled={false}
-                  onClick={() => setOffSet(0)}
-                />
-                {/* The next button */}
-                <PaginationButton
-                  label="Next"
-                  disabled={false}
-                  onClick={() => setOffSet(offset + 20)}
+          <AnimatePresence mode="wait">
+            {isCardClick ? (
+              <div className="flex justify-center items-center flex-wrap gap-15 mt-10 w-full">
+                <InfoCard
+                  key="infocard"
+                  onClose={() => setIsCardClick(false)}
                 />
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex flex-col items-center justify-center" key="pokemonlist">
+                {/* The div enclosing the deck of pokemons */}
+                <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
+                  {pokemons.map((pokemon) => {
+                    const id = pokemon.url.split("/")[6]; // extracting id
+                    const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
+                    return (
+                      // The div enclosing each pokemon
+                      <motion.div
+                        className=""
+                        onClick={() => handleClick(pokemon.url)}
+                        initial={{ opacity: 0.2 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.9 }}
+                        key={pokemon.name}
+                      >
+                        <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
+                      </motion.div>
+                    );
+                  })}
+                </div>
+                {/* The container for buttons for back, first page and next */}
+                <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
+                  {/* The back button */}
+                  <PaginationButton
+                    label="Back"
+                    disabled={offset === 0}
+                    onClick={() => setOffSet(offset - 20)}
+                  />
+                  {/* The first page button */}
+                  <PaginationButton
+                    label="First-Page"
+                    disabled={false}
+                    onClick={() => setOffSet(0)}
+                  />
+                  {/* The next button */}
+                  <PaginationButton
+                    label="Next"
+                    disabled={false}
+                    onClick={() => setOffSet(offset + 20)}
+                  />
+                </div>
+              </div>
+            )}
+          </AnimatePresence>
         </Suspense>
       )}
     </>
