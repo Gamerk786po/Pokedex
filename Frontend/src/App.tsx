@@ -3,6 +3,7 @@ import Header from "./components/header/header";
 import { PokemonEffectivenessProvider } from "./context/EffectivenessContext/EffectivnessProvider";
 import { PokemonEvolutionsProvider } from "./context/EvolutionsContext/EvolutionsProvider";
 import { PokemonProvider } from "./context/PokemonContext/PokemonProvider";
+import { PokemonsListProvider } from "./context/PokemonsListContext/PokemonsListProvider";
 import { PokemonSpeciesProvider } from "./context/SpeciesContext/SpeciesProvider";
 
 function App() {
@@ -16,15 +17,17 @@ function App() {
         for storing the info of particular
          clicked pokemons
           */}
-        <PokemonProvider>
-          <PokemonEffectivenessProvider>
-            <PokemonSpeciesProvider>
-              <PokemonEvolutionsProvider>
-                <Body />
-              </PokemonEvolutionsProvider>
-            </PokemonSpeciesProvider>
-          </PokemonEffectivenessProvider>
-        </PokemonProvider>
+        <PokemonsListProvider>
+          <PokemonProvider>
+            <PokemonEffectivenessProvider>
+              <PokemonSpeciesProvider>
+                <PokemonEvolutionsProvider>
+                  <Body />
+                </PokemonEvolutionsProvider>
+              </PokemonSpeciesProvider>
+            </PokemonEffectivenessProvider>
+          </PokemonProvider>
+        </PokemonsListProvider>
       </div>
     </>
   );

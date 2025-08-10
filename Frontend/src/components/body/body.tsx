@@ -13,12 +13,8 @@ import {
   EffectivenessInterface,
   PokemonType,
 } from "../../context/EffectivenessContext/interface";
+import { usePokemonsList } from "../../context/PokemonsListContext/usePokemonsList";
 
-// Interface for the 20 got pokemons
-interface PokemonsInterface {
-  name: string;
-  url: string;
-}
 // Interface for Pokemon Types
 interface PokemonTypes {
   slot: number;
@@ -129,11 +125,6 @@ interface PokemonDamageRelations {
 }
 // The component for body
 const Body = () => {
-  // State managements:+
-
-  // Pokemons data
-  const [pokemons, setPokemons] = useState<PokemonsInterface[]>([]);
-
   // Storring the error for extracting pokemons data
   const [error, setError] = useState<string>("");
 
@@ -151,7 +142,10 @@ const Body = () => {
 
   // API of clicked pokemon
   const [pokemonApi, setpokemonApi] = useState<string>("");
-
+  /*
+  usePokemonsList for pokemonsList and setPokemonsList
+   */
+  const { pokemonsList, setPokemonsList } = usePokemonsList();
   /* 
   Pokemon info
   UsePokemon for PokemonContext
@@ -183,7 +177,7 @@ const Body = () => {
       }
 
       const json = await res.json();
-      setPokemons(json.results);
+      setPokemonsList(json.results);
       setTimeout(() => setIsLoading(false), 1000);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -448,10 +442,13 @@ const Body = () => {
                 />
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center" key="pokemonlist">
+              <div
+                className="flex flex-col items-center justify-center"
+                key="pokemonlist"
+              >
                 {/* The div enclosing the deck of pokemons */}
                 <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
-                  {pokemons.map((pokemon) => {
+                  {pokemonsList?.map((pokemon) => {
                     const id = pokemon.url.split("/")[6]; // extracting id
                     const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
                     return (
