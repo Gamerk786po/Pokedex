@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
 import { PokemonContext } from "./PokemonContext";
-import { ClickedPokemonInterface } from "./Interfaces";
+import { ClickedPokemonInterface } from "./Interface";
 
 
 // Provider for the Pokemon Context

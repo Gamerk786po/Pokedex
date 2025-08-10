@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ClickedPokemonInterface } from "./Interfaces";
+import { ClickedPokemonInterface } from "./Interface";
 
 // Interface for Pokemon Context
 interface PokemonContextInterface{
