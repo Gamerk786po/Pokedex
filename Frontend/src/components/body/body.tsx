@@ -454,7 +454,6 @@ const Body = () => {
                     return (
                       // The div enclosing each pokemon
                       <motion.div
-                        className=""
                         onClick={() => handleClick(pokemon.url)}
                         initial={{ opacity: 0.2 }}
                         animate={{ opacity: 1 }}

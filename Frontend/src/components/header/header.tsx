@@ -1,5 +1,11 @@
+import { useEffect, useState } from "react";
+
 // The main component for header
 const Header = () =>{
+    // State for storing the searched keyword
+    const [searchedPokemon, setSearchedPokemon] = useState<string | null>(null);
+    // useEffect that will run after searchedPokemon is changed
+    useEffect()
     return(
         // The header tag containing the contents of header
         <header className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between 2xl:justify-around 2xl:gap-50 items-center sticky top-0 z-50 bg-white shadow-md p-10">
