@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { useSearchedPokemons } from "../../context/SearchedPokemons/useSearchedPokemons";
 
 // The main component for header
 const Header = () =>{
+    
+    // Getting searchedPokemons and setSearchedPokemons from SearchedPokemonsContext
+    const { setSearchedPokemons } = useSearchedPokemons();
+    
     // State for storing the searched keyword
-    const [searchedPokemon, setSearchedPokemon] = useState<string | null>(null);
+    const [searchedQuerry, setSearchedQuerry] = useState<string | null>(null);
     // useEffect that will run after searchedPokemon is changed
     useEffect()
     return(

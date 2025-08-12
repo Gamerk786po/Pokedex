@@ -1,10 +1,6 @@
 import Body from "./components/body/body";
 import Header from "./components/header/header";
-import { PokemonEffectivenessProvider } from "./context/EffectivenessContext/EffectivnessProvider";
-import { PokemonEvolutionsProvider } from "./context/EvolutionsContext/EvolutionsProvider";
-import { PokemonProvider } from "./context/PokemonContext/PokemonProvider";
-import { PokemonsListProvider } from "./context/PokemonsListContext/PokemonsListProvider";
-import { PokemonSpeciesProvider } from "./context/SpeciesContext/SpeciesProvider";
+import { PokedexContexts } from "./PokedexContexts";
 
 function App() {
   return (
@@ -12,22 +8,9 @@ function App() {
       {/* The main div containing everything */}
       <div className="min-h-screen bg-gradient-to-r from-blue-200 to-blue-400">
         <Header />
-        {/*
-         The Pokemon Provider for Pokemon state 
-        for storing the info of particular
-         clicked pokemons
-          */}
-        <PokemonsListProvider>
-          <PokemonProvider>
-            <PokemonEffectivenessProvider>
-              <PokemonSpeciesProvider>
-                <PokemonEvolutionsProvider>
-                  <Body />
-                </PokemonEvolutionsProvider>
-              </PokemonSpeciesProvider>
-            </PokemonEffectivenessProvider>
-          </PokemonProvider>
-        </PokemonsListProvider>
+        <PokedexContexts>
+          <Body />
+        </PokedexContexts>
       </div>
     </>
   );
