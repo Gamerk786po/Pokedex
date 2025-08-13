@@ -1,5 +1,5 @@
 // interface of every object
-interface PokemonsList {
+export interface PokemonsList {
     name: string;
     url: string;
 }
