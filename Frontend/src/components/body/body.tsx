@@ -15,115 +15,20 @@ import {
 } from "../../context/EffectivenessContext/interface";
 import { usePokemonsList } from "../../context/PokemonsListContext/usePokemonsList";
 import { useSearchedPokemons } from "../../context/SearchedPokemons/useSearchedPokemons";
+// Importing interfaces
+import {
+  PokemonTypes,
+  PokemonStats,
+  PokemonMoves,
+  PokemonAbilities,
+  PokemonEggGroups,
+  PokemonVarieties,
+  FlavourTextEnteries,
+  RawEvolutionChain,
+  PokemonEvolutionsInterface,
+  PokemonDamageRelations
+} from "../body/bodyInterfaces";
 
-// Interface for Pokemon Types
-interface PokemonTypes {
-  slot: number;
-  type: {
-    name: string;
-    url: string;
-  };
-}
-// Interface for Pokemon stats
-interface PokemonStats {
-  base_stat: number;
-  effort: number;
-  stat: {
-    name: string;
-    url: string;
-  };
-}
-// Interface for Pokemon moves
-interface PokemonMoves {
-  move: {
-    name: string;
-    url: string;
-  };
-  version_group_details: {
-    level_learned_at: number;
-    move_learn_method: {
-      name: string;
-      url: string;
-    };
-  }[];
-}
-// Interface for Pokemon abilities
-interface PokemonAbilities {
-  ability: {
-    name: string;
-    url: string;
-  };
-  is_hidden: boolean;
-  slot: number;
-}
-
-// Interface for Pokemon egg_groups
-interface PokemonEggGroups {
-  name: string;
-  url: string;
-}
-
-// Interface for Pokemon Varieties
-interface PokemonVarieties {
-  is_default: boolean;
-  pokemon: {
-    name: string;
-    url: string;
-  };
-}
-
-// Interface for Pokemon Flavour-Text-Interies
-interface FlavourTextEnteries {
-  flavor_text: string;
-  language: {
-    name: string;
-    url: string;
-  };
-  version: {
-    name: string;
-    url: string;
-  };
-}
-
-// Interface for RawEvolutionChain
-interface RawEvolutionChain {
-  species: {
-    name: string;
-    url: string;
-  };
-  evolution_details: {
-    min_level: number | null;
-    min_happiness: number | null;
-    held_item: { name: string } | null;
-    time_of_day: string;
-    item: { name: string } | null;
-    trigger: { name: string } | null;
-  }[];
-  evolves_to?: RawEvolutionChain[];
-}
-
-// Interface for Evo Details
-export interface EvolutionDetails {
-  min_level: number | null;
-  min_happiness: number | null;
-  held_item: string | null;
-  time_of_day: string;
-  item: string | null;
-  trigger: string | null;
-}
-
-// Interface for Pokemon Evolutions
-export interface PokemonEvolutionsInterface {
-  name: string;
-  url: string;
-  evo_details: EvolutionDetails;
-  evolves_to: PokemonEvolutionsInterface[]; // Recursive branching support
-}
-
-interface PokemonDamageRelations {
-  name: string;
-  url: string;
-}
 // The component for body
 const Body = () => {
   // Storring the error for extracting pokemons data
