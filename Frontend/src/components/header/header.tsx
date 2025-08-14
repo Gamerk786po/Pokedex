@@ -13,7 +13,7 @@ const Header = () => {
   useEffect(() => {
     // if search query is empty, reset results immediately
     if (!searchedQuerry.trim()) {
-      setSearchedPokemons(null);
+      setSearchedPokemons([]);
       return;
     }
     const debouncerTimeout = setTimeout(async () => {
@@ -24,7 +24,7 @@ const Header = () => {
       const filteredPokemons = pokemonsData.filter((pokemon: PokemonsList) => {
         return pokemon.name
           .toLowerCase()
-          .startsWith(searchedQuerry.toLowerCase());
+          .includes(searchedQuerry.toLowerCase());
       });
       // Formating
       const searchedPokemonsList = [];
@@ -34,10 +34,10 @@ const Header = () => {
       }
       // Setting the formated data in context state
       setSearchedPokemons(searchedPokemonsList);
-      console.log(searchedPokemonsList);
-    }, 300);
+    }, 500);
     return () => clearTimeout(debouncerTimeout);
   }, [searchedQuerry, setSearchedPokemons]);
+  // Returning the header component
   return (
     // The header tag containing the contents of header
     <header className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between 2xl:justify-around 2xl:gap-50 items-center sticky top-0 z-50 bg-white shadow-md p-10">

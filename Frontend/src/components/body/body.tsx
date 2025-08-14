@@ -14,6 +14,7 @@ import {
   PokemonType,
 } from "../../context/EffectivenessContext/interface";
 import { usePokemonsList } from "../../context/PokemonsListContext/usePokemonsList";
+import { useSearchedPokemons } from "../../context/SearchedPokemons/useSearchedPokemons";
 
 // Interface for Pokemon Types
 interface PokemonTypes {
@@ -163,6 +164,9 @@ const Body = () => {
   useEffectiveness for pokemonEffectivenessContext
    */
   const { setPokemonEffectiveness } = useEffectiveness();
+
+  //  useSearchedPokemons for geting searchedPokemonsData
+  const { searchedPokemons, pageIndex, setPageIndex } = useSearchedPokemons();
   // Functions
 
   // The function for api call of 20 pokemons in pagination.
@@ -435,13 +439,64 @@ const Body = () => {
         <Suspense fallback={<></>}>
           <AnimatePresence mode="wait">
             {isCardClick ? (
+              // The container for displaying the info card on click
               <div className="flex justify-center items-center flex-wrap gap-15 mt-10 w-full">
                 <InfoCard
                   key="infocard"
                   onClose={() => setIsCardClick(false)}
                 />
               </div>
+            ) : searchedPokemons?.length > 0 ? (
+              // The container for displaying the searched pokemons
+              // The container for displaying the searched pokemons
+              <div
+                className="flex flex-col items-center justify-between"
+                key="searchedlist"
+              >
+                {/* The div enclosing the deck of searched pokemons */}
+                <div className="flex justify-center items-center flex-wrap gap-15 mt-10">
+                  {searchedPokemons[pageIndex].map((pokemon) => {
+                    const id = pokemon.url.split("/")[6]; // extracting id
+                    const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; // the url for image
+                    return (
+                      // The div enclosing each pokemon
+                      <motion.div
+                        onClick={() => handleClick(pokemon.url)}
+                        initial={{ opacity: 0.2 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.9 }}
+                        key={pokemon.name}
+                      >
+                        <Card name={`${pokemon.name}`} imgUrl={`${imgUrl}`} />
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* The container for buttons for back, first page and next */}
+                <div className="mt-7 md:10 p-5 flex flex-row justify-center items-center gap-5">
+                  {/* The back button */}
+                  <PaginationButton
+                    label="Back"
+                    disabled={pageIndex === 0}
+                    onClick={() => setPageIndex(pageIndex - 1)}
+                  />
+                  {/* The first page button */}
+                  <PaginationButton
+                    label="First-Page"
+                    disabled={false}
+                    onClick={() => setPageIndex(0)}
+                  />
+                  {/* The next button */}
+                  <PaginationButton
+                    label="Next"
+                    disabled={pageIndex === searchedPokemons.length - 1}
+                    onClick={() => setPageIndex(pageIndex + 1)}
+                  />
+                </div>
+              </div>
             ) : (
+              // The container for displaying the normal paginated pokemons
               <div
                 className="flex flex-col items-center justify-center"
                 key="pokemonlist"

@@ -5,7 +5,7 @@ import { PokemonsListArray } from "./interface";
 interface SearchedPokemonsContext {
     pageIndex: number;
     setPageIndex: React.Dispatch<React.SetStateAction<number>>;
-    searchedPokemons: PokemonsListArray | null;
-    setSearchedPokemons: (pokemon: PokemonsListArray | null) => void;
+    searchedPokemons: PokemonsListArray | [];
+    setSearchedPokemons: (pokemon: PokemonsListArray | []) => void;
 }
 export const SearchedPokemonsContext = createContext<SearchedPokemonsContext | undefined>(undefined);

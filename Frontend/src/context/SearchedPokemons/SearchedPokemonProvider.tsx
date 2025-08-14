@@ -7,7 +7,7 @@ export const SearchedPokemonsProvider = ({children}: {children: ReactNode}) => {
     // state for pageNumber
     const [pageIndex, setPageIndex] = useState<number>(0); 
     // State for searchedPokemons
-    const [searchedPokemons, setSearchedPokemons] = useState<PokemonsListArray | null>(null)
+    const [searchedPokemons, setSearchedPokemons] = useState<PokemonsListArray | []>([])
     return(
         <SearchedPokemonsContext.Provider value={{pageIndex, setPageIndex, searchedPokemons, setSearchedPokemons}}>{ children }</SearchedPokemonsContext.Provider>
     )
