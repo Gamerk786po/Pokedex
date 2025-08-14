@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSearchedPokemons } from "../../context/SearchedPokemons/useSearchedPokemons";
 import { PokemonsList } from "../../context/SearchedPokemons/interface";
+import SocialContact from "./socialContacts";
 
 // The main component for header
 const Header = () => {
+    // contacts
+    const contacts = [
+      {name: "discord", url: "https://discord.com/users/gamerk_786po"},
+      {name: "instagram", url: "https://www.instagram.com/gamerk786po/"},
+      {name: "github", url: "https://github.com/Gamerk786po"},
+      { name: "gmail", url: "https://mail.google.com/mail/?view=cm&fs=1&to=abdullahpper@gmail.com" }
+    ]
   // Getting searchedPokemons and setSearchedPokemons from SearchedPokemonsContext
   const { setSearchedPokemons, setPageIndex } = useSearchedPokemons();
 
@@ -46,6 +54,16 @@ const Header = () => {
         <h1 className="text-2xl md:text-4xl xl:text-5xl 2xl:text-7xl font-bold">
           POKEDEX
         </h1>
+      </div>
+      {/* Div Containing contacts */}
+      <div className="flex flex-row gap-6 translate-y-6 translate-x-9 justify-center items-center">
+      {contacts.map((contact) => (
+          <SocialContact
+            key={contact.name}
+            name={contact.name}
+            url={contact.url}
+          />
+        ))}
       </div>
       {/* The div containing the searching field */}
       <input
