@@ -48,7 +48,7 @@ const Header = () => {
   // Returning the header component
   return (
     // The header tag containing the contents of header
-    <header className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between 2xl:justify-around 2xl:gap-50 items-center sticky top-0 z-50 bg-white shadow-md p-10">
+    <header className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between 2xl:justify-around 2xl:gap-50 items-center lg:sticky top-0 z-50 bg-white shadow-md p-10">
       {/* Div containing the heading */}
       <div>
         <h1 className="text-2xl md:text-4xl xl:text-5xl 2xl:text-7xl font-bold">
@@ -56,7 +56,7 @@ const Header = () => {
         </h1>
       </div>
       {/* Div Containing contacts */}
-      <div className="flex flex-row gap-6 translate-y-6 translate-x-9 justify-center items-center">
+      <div className="flex flex-row gap-6 md:translate-y-6 lg:translate-x-9 justify-center items-center">
       {contacts.map((contact) => (
           <SocialContact
             key={contact.name}
