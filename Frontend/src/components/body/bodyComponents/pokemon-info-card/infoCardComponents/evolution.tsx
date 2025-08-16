@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { EvolutionDetails } from "../../../body";
+import { EvolutionDetails } from "../../../bodyInterfaces";
 
 // Props for each evolution
 interface EvolutionProps {
@@ -14,7 +14,7 @@ const Evolution: React.FC<EvolutionProps> = ({ id, name, evoDetails }) => {
   return (
     <>
       {evoDetails && (
-        <div className="text-xs text-gray-600 mt-1 text-center max-w-[8rem]">
+        <div className="text-xs 2xl:text-2xl text-gray-600 mt-1 text-center max-w-[8rem]">
           {evoDetails.trigger === "level-up" && evoDetails.min_level
             ? `Evolves at level ${evoDetails.min_level} ${
                 evoDetails.held_item
@@ -47,12 +47,12 @@ const Evolution: React.FC<EvolutionProps> = ({ id, name, evoDetails }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: imgLoaded ? 1 : 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="h-[5rem] md:h-[7rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
+          className="h-[5rem] md:h-[7rem] 2xl:h-[11rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
         />
         {!imgLoaded && (
-          <div className="h-[8rem] w-[8rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>
+          <div className="h-[8rem] w-[8rem] 2xl:h-[11rem] 2xl:w-[11rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>
         )}
-        <p className="font-medium mt-2 capitalize">{name}</p>
+        <p className="font-medium mt-2 capitalize 2xl:text-xl">{name}</p>
       </div>
     </>
   );

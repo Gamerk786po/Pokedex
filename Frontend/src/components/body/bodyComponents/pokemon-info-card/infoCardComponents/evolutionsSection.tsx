@@ -1,5 +1,5 @@
 import { useEvolutions } from "../../../../../context/EvolutionsContext/useEvolutions";
-import { PokemonEvolutionsInterface } from "../../../body";
+import { PokemonEvolutionsInterface } from "../../../bodyInterfaces";
 import Evolution from "./evolution";
 
 const renderEvolutions = (evolution: PokemonEvolutionsInterface | null) => {
