@@ -26,7 +26,7 @@ import {
   FlavourTextEnteries,
   RawEvolutionChain,
   PokemonEvolutionsInterface,
-  PokemonDamageRelations
+  PokemonDamageRelations,
 } from "../body/bodyInterfaces";
 
 // The component for body
@@ -87,7 +87,7 @@ const Body = () => {
 
       const json = await res.json();
       setPokemonsList(json.results);
-      setTimeout(() => setIsLoading(false), 1000);
+      setTimeout(() => setIsLoading(false), 500);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -302,8 +302,7 @@ const Body = () => {
       };
       setClickedPokemon(pokemonData); // setting the clickedPokemon data
       const typeUrls = (data.types as PokemonTypes[]).map((t) => t.type.url); // Getting Types urls
-      await getSpeciesData();
-      await getEffectivenessData(typeUrls);
+      await Promise.all([getSpeciesData(), getEffectivenessData(typeUrls)]);
       setTimeout(() => setIsLoading(false), 1000); // setting the loading to be false
     } catch (err: unknown) {
       // Error handling
