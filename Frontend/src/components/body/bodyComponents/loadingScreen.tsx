@@ -6,12 +6,12 @@ const LoadingScreen = () => {
     // The container for loading screen
     <div className="flex justify-center items-center flex-col overflow-auto">
       <img
-        className="h-40 [filter:drop-shadow(var(--drop-shadow-lightning))] animate-electric"
+        className="h-40 2xl:h-50 [filter:drop-shadow(var(--drop-shadow-lightning))] animate-electric"
         src="/loading-gif/Pikachu-running.gif"
         alt="loading"
         loading="lazy"
       ></img>
-      <span>
+      <span className="2xl:text-[30px]">
         <Typewriter
           words={["Hang tight! Pikachu's almost there.."]}
           cursor

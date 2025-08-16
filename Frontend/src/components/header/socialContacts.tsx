@@ -11,7 +11,7 @@ interface SocialProps {
         <img
           src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${name}.svg`}
           alt={name}
-          className="md:hover:w-6 w-5 transition-all ease-in-out duration-400"
+          className="md:hover:w-6 w-5 2xl:w-8 2xl:hover:w-9 transition-all ease-in-out duration-400"
         ></img>
       </a>
     );

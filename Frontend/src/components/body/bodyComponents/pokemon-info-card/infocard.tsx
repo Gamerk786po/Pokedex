@@ -32,13 +32,15 @@ const InfoCard: React.FC<InfoCardProps> = ({ onClose }) => {
           animate={{scale: 1 }}
           exit={{scale: 0.8 }}
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-          className="overflow-hidden bg-white shadow-md w-[25rem] md:w-[37rem] rounded-xl mx-0"
+          className="overflow-hidden bg-white shadow-md w-[25rem] md:w-[37rem] 2xl:w-[65rem] rounded-xl mx-0"
         >
           <button
             onClick={onClose}
-            className="self-end m-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 lg:hover:cursor-pointer w-[4rem] shadow-black shadow-2xl"
+            className="self-end m-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 lg:hover:cursor-pointer w-[4rem] 2xl:w-[5rem] 2xl:h-[4rem] shadow-black shadow-2xl"
           >
+            <p className="2xl:text-xl"> 
             ✖
+            </p>
           </button>
 
           <div className="my-10 flex flex-col">
