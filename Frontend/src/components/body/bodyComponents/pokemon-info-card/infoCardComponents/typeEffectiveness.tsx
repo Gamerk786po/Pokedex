@@ -28,12 +28,12 @@ const TypeEffectiveness = () => {
   return (
     <>
     {/* Main heading */}
-    <h2 className="font-bold text-xl ml-8 my-1 md:my-5">Damage Taken</h2>
+    <h2 className="font-bold text-xl 2xl:text-3xl 2xl:mb-4 2xl:mt-5 ml-8 my-1 md:my-5">Damage Taken</h2>
     <div className="mx-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-4">
       {Object.entries(pokemonEffectiveness ?? {}).map(([type, multiplier]) => (
         <div
           key={type}
-          className={`${typeColors[type] || "bg-gray-300"} py-1 text-center rounded-xl capitalize text-white font-bold text-[15px]
+          className={`${typeColors[type] || "bg-gray-300"} py-1 2xl:py-2 text-center rounded-xl capitalize text-white font-bold text-[15px] 2xl:text-[23px]
                 transition-transform duration-300 ease-in-out lg:hover:scale-105`}
         >
           <span className="px-1">{type}</span>
