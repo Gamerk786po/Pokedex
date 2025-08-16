@@ -61,14 +61,14 @@ const Abilities = () => {
 
   return (
     <div className="mx-8 my-6">
-      <h2 className="text-xl font-bold mb-4">Abilities</h2>
+      <h2 className="text-xl 2xl:text-3xl font-bold mb-4 2xl:mb-5">Abilities</h2>
 
       <div className="flex flex-wrap gap-4 justify-start">
         {clickedPokemon?.abilities.map((a) => (
           <div
             key={a.ability.name}
             onClick={() => handleClick(a.ability.url, a.ability.name)}
-            className={`py-1 px-4 rounded-xl capitalize text-white font-semibold text-sm xl:text-[17px] cursor-pointer transition-transform duration-300 hover:scale-105
+            className={`py-1 2xl:py-3 px-4 2xl:px-5 rounded-xl capitalize text-white font-semibold text-sm xl:text-[17px] 2xl:text-[23px] cursor-pointer transition-transform duration-300 hover:scale-105
               ${
                 a.is_hidden
                   ? "bg-yellow-400 text-yellow-900"
@@ -97,10 +97,10 @@ const Abilities = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 1, ease: "linear" }}
             >
-              <h3 className="text-lg font-semibold capitalize">
+              <h3 className="text-lg 2xl:text-xl font-semibold capitalize">
                 {selectedAbilityName}
               </h3>
-              <p className="mt-2">{ability.effect}</p>
+              <p className="mt-2 2xl:text-xl">{ability.effect}</p>
             </motion.div>
           </>
         ) : (
