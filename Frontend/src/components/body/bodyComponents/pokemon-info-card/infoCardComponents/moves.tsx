@@ -27,13 +27,13 @@ const MovesSection = () => {
   );
   return (
     <>
-      <h2 className="font-bold text-xl ml-8 my-1 md:my-5">Moves</h2>
+      <h2 className="font-bold text-xl 2xl:text-3xl ml-8 my-1 md:my-5">Moves</h2>
       {/* Container for all the Moves */}
       <div className="flex flex-col mx-5">
         {/* Level up moves */}
         {Array.isArray(levelingMoves) && levelingMoves.length > 0 && (
           <>
-            <h3 className="font-medium text-center mb-5">Level-up Moves</h3>
+            <h3 className="font-medium 2xl:text-2xl text-center mb-5">Level-up Moves</h3>
             {levelingMoves?.map((move) => {
               return (
                 <Move
@@ -50,7 +50,7 @@ const MovesSection = () => {
         {/* Machine moves */}
         {Array.isArray(machineMoves) && machineMoves.length > 0 && (
           <>
-            <h3 className="font-medium text-center mb-5 mt-5">Machine moves</h3>
+            <h3 className="font-medium 2xl:text-2xl text-center mb-5 mt-5">Machine moves</h3>
             {machineMoves?.map((move) => {
               return (
                 <Move
@@ -67,7 +67,7 @@ const MovesSection = () => {
         {/* Tutor moves */}
         {Array.isArray(tutorMoves) && tutorMoves.length > 0 && (
           <>
-            <h3 className="font-medium text-center mb-5 mt-5">Tutor moves</h3>
+            <h3 className="font-medium 2xl:text-2xl text-center mb-5 mt-5">Tutor moves</h3>
             {tutorMoves?.map((move) => {
               return (
                 <Move
@@ -84,7 +84,7 @@ const MovesSection = () => {
         {/* Egg moves */}
         {Array.isArray(eggMoves) && eggMoves?.length > 0 && (
           <>
-            <h3 className="font-medium text-center mb-5 mt-5">Egg</h3>
+            <h3 className="font-medium 2xl:text-2xl text-center mb-5 mt-5">Egg</h3>
             {eggMoves?.map((move) => {
               return (
                 <Move

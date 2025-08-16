@@ -78,13 +78,13 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
   const getMoveDetails = async () => {
     try {
       const res = await fetch(url);
-  
+
       if (!res.ok) {
         throw new Error(`Failed to fetch move details: ${res.status}`);
       }
-  
+
       const data = await res.json();
-  
+
       const formatedData = {
         effect:
           (data.effect_entries as EffectEntries[]).find(
@@ -93,20 +93,21 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
         accuracy: data?.accuracy ?? null,
         power: data?.power ?? null,
         pp: data.pp,
-        stat_changes: (data.stat_changes as StatChange[]).map((stat_change) => ({
-          change: stat_change.change,
-          name: stat_change.stat.name,
-        })),
+        stat_changes: (data.stat_changes as StatChange[]).map(
+          (stat_change) => ({
+            change: stat_change.change,
+            name: stat_change.stat.name,
+          })
+        ),
         type: data.type.name,
       };
-  
+
       setDetail(formatedData);
       setIsFetched(true);
     } catch (err) {
       console.error("Failed to fetch move details:", err);
     }
   };
-  
 
   // useEffect when isDetail is changed
   useEffect(() => {
@@ -115,6 +116,7 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
     } else {
       setIsFetched(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDetail]);
 
   const type = detail?.type ?? "";
@@ -122,16 +124,16 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
 
   return (
     // Container for each move
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-2 px-4 py-3 border-b relative">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-2 px-4 py-3 border-b relative 2xl:gap-y-4 2xl:px-8 2xl:py-6">
       {/* Name of Move */}
-      <p className="text-center capitalize">{name}</p>
+      <p className="text-center capitalize 2xl:text-2xl">{name}</p>
       {/* Learned at level */}
-      <p className="text-center">{learned_at_level} Lv</p>
+      <p className="text-center 2xl:text-2xl">{learned_at_level} Lv</p>
       {/* Method for learning */}
-      <p className="text-center capitalize">{method}</p>
+      <p className="text-center capitalize 2xl:text-2xl">{method}</p>
       {/* Detail button */}
       <button
-        className="text-center text-blue-500 lg:hover:cursor-pointer"
+        className="text-center text-blue-500 lg:hover:cursor-pointer 2xl:text-2xl"
         onClick={() => setIsDetail((prev) => !prev)}
       >
         Details
@@ -142,10 +144,10 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="col-span-2 sm:col-span-4 bg-gray-200 rounded-lg p-4 mt-2 shadow-md justify-center"
+          className="col-span-2 sm:col-span-4 bg-gray-200 rounded-lg p-4 mt-2 shadow-md justify-center 2xl:p-8 2xl:mt-4"
         >
           {/* Container for Accuracy, power and pp */}
-          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center gap-4 sm:gap-10 text-center">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center gap-4 sm:gap-10 text-center 2xl:gap-16 2xl:text-xl">
             <p className="sm:basis-1/4">
               <span className="font-medium">Accuracy:</span>{" "}
               {detail.accuracy ?? "N/A"}
@@ -159,20 +161,20 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
             </p>
           </div>
           {/* Effect of the move */}
-          <div className="flex justify-center mt-4">
-            <p className="text-center">{detail.effect}</p>
+          <div className="flex justify-center mt-4 2xl:mt-8">
+            <p className="text-center 2xl:text-xl">{detail.effect}</p>
           </div>
           {/* Stat changes */}
           {detail.stat_changes.length > 0 && (
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2 text-center">
+            <div className="mt-6 2xl:mt-10">
+              <h3 className="text-lg font-semibold mb-2 text-center 2xl:text-2xl">
                 📊 Stat Changes
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-2 2xl:space-y-4">
                 {detail.stat_changes.map((statChange, index) => (
                   <li
                     key={index}
-                    className={`flex justify-between px-4 py-2 rounded-lg shadow ${
+                    className={`flex justify-between px-4 py-2 rounded-lg shadow 2xl:px-6 2xl:py-4 2xl:text-lg ${
                       statChange.change > 0
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
@@ -188,10 +190,10 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
               </ul>
             </div>
           )}
-         {/* Typing */}
-          <div className="flex justify-center mt-6">
+          {/* Typing */}
+          <div className="flex justify-center mt-6 2xl:mt-10">
             <span
-              className={`px-4 py-1 rounded-full font-semibold capitalize shadow ${typeClass}`}
+              className={`px-4 py-1 rounded-full font-semibold capitalize shadow ${typeClass} 2xl:px-8 2xl:py-2 2xl:text-xl`}
             >
               {type}
             </span>
