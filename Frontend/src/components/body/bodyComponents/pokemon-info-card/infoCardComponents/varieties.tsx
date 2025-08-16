@@ -7,7 +7,7 @@ const Varieties = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
   return (
     <>
-    <h2 className="font-bold text-xl ml-8 my-1 md:my-5">Alternate Forms</h2>
+    <h2 className="font-bold text-xl 2xl:text-3xl ml-8 my-1 md:my-5">Alternate Forms</h2>
     {/* Container for all alternate form */}
     <div className="flex flex-wrap justify-center items-center mx-5 gap-8">
       {pokemonSpecies?.varieties.map((variety) => {
@@ -23,12 +23,12 @@ const Varieties = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: imgLoaded ? 1 : 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="h-[7rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
+              className="h-[7rem] 2xl:h-[9rem] object-contain drop-shadow-xl rounded-xl drop-sha transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
             />
             {!imgLoaded && (
-              <div className="h-[8rem] w-[8rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>
+              <div className="h-[8rem] w-[8rem] 2xl:h-[9rem] 2xl:w-[9rem] rounded-xl bg-gray-200 animate-pulse absolute"></div>
             )}
-            <p className="font-medium mt-2 capitalize">{variety.name}</p>
+            <p className="font-medium text-xl mt-2 capitalize">{variety.name}</p>
           </div>
         );
       })}
