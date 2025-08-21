@@ -24,10 +24,9 @@ A modern **Pokédex web app** built with **React.js (TypeScript)** and **Tailwin
 
 ## 🖼 Screenshots
 
-![Pokédex Screenshot 1](./Pokedex%20ss/screenshot1.png)  
-![Pokédex Screenshot 2](./Pokedex%20ss/screenshot2.png)  
-
-*(Add more screenshots in the `Pokedex ss` folder and update links as needed)*  
+![Pokédex Home](./Pokedex%20ss/pokedex-home.png)  
+![Pokédex Search](./Pokedex%20ss/pokedex-search.png)
+![Pokédex Detail](./Pokedex%20ss/pokedex-detail.png) 
 
 ---
 
