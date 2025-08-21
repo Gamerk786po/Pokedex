@@ -24,9 +24,9 @@ A modern **Pokédex web app** built with **React.js (TypeScript)** and **Tailwin
 
 ## 🖼 Screenshots
 
-![Pokédex Home](./Pokedex%20ss/pokedex-home.png)  
-![Pokédex Search](./Pokedex%20ss/pokedex-search.png)
-![Pokédex Detail](./Pokedex%20ss/pokedex-detail.png) 
+![Pokédex Home](./Pokedex%20ss/pokedex-home.PNG)  
+![Pokédex Search](./Pokedex%20ss/pokedex-search.PNG)
+![Pokédex Detail](./Pokedex%20ss/pokedex-detail.PNG) 
 
 ---
 
