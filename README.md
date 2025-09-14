@@ -77,13 +77,12 @@ Push to the branch (git push origin feature/new-feature)
 Open a Pull Request
 
 🔮 Future Improvements
-🌙 Add Dark Mode
+
+New_pages Adding two new pages for pokemon locations and items
 
 🎵 Add Pokémon cries (sounds)
 
 🏆 Add Trainer Profiles
-
-🗺 Add Region-based Pokémon filtering
 
 📩 Contact
 👤 Abdullah (Gamerk786po)
