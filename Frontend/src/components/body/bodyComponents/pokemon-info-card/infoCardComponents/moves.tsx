@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePokemon } from "../../../../../context/PokemonContext/usePokemon";
 import Move, { MoveProps } from "./move";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Interface for MoveCategoryProps
 interface MoveCategoryProps {
@@ -47,19 +48,27 @@ const MoveCategory: React.FC<MoveCategoryProps> = ({ title, moves }) => {
         <span>{open ? "▲" : "▼"}</span>
       </button>
 
-      {open && (
-        <div className="mt-2 space-y-2">
-          {moves.map((move) => (
-            <Move
-              key={move.name}
-              name={move.name}
-              url={move.url}
-              learned_at_level={move.learned_at_level}
-              method={move.method}
-            />
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="mt-2 space-y-2 overflow-hidden"
+          >
+            {moves.map((move) => (
+              <Move
+                key={move.name}
+                name={move.name}
+                url={move.url}
+                learned_at_level={move.learned_at_level}
+                method={move.method}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
