@@ -15,6 +15,7 @@ interface MoveDetail {
   accuracy: number | null;
   power: number | null;
   pp: number;
+  damage_class: string;
   stat_changes:
     | {
         change: number;
@@ -92,6 +93,7 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
           )?.effect ?? "No effect found",
         accuracy: data?.accuracy ?? null,
         power: data?.power ?? null,
+        damage_class: data?.damage_class?.name,
         pp: data.pp,
         stat_changes: (data.stat_changes as StatChange[]).map(
           (stat_change) => ({
@@ -155,6 +157,10 @@ const Move: React.FC<MoveProps> = ({ name, url, learned_at_level, method }) => {
             <p className="sm:basis-1/4">
               <span className="font-medium">Power:</span>{" "}
               {detail.power ?? "N/A"}
+            </p>
+            <p className="sm:basis-1/4 whitespace-nowrap">
+              <span className="font-medium">Category:</span>{" "}
+              {detail.damage_class ?? "N/A"}
             </p>
             <p className="sm:basis-1/4">
               <span className="font-medium">PP:</span> {detail.pp}
