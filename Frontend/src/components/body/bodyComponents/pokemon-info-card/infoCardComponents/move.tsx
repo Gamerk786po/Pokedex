@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // for using framer motion
 
 // Props for Move component
-interface MoveProps {
+export interface MoveProps { 
+  // note: Used in moves.tsx
   name: string;
   url: string;
   learned_at_level: number;
