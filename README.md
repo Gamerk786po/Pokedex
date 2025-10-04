@@ -80,8 +80,6 @@ Open a Pull Request
 
 New_pages Adding two new pages for pokemon locations and items
 
-🎵 Add Pokémon cries (sounds)
-
 🏆 Add Trainer Profiles
 
 📩 Contact
