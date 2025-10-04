@@ -41,7 +41,7 @@ const MoveCategory: React.FC<MoveCategoryProps> = ({ title, moves }) => {
     <div className="mb-4">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center bg-gray-200 dark:bg-gray-700 p-3 rounded-lg font-medium hover:bg-gray-300"
+        className="w-full flex justify-between items-center bg-gray-200 dark:bg-gray-700 p-3 rounded-lg font-medium hover:bg-gray-300 hover:cursor-pointer transition-all ease-in-out"
       >
         <span>{title}</span>
         <span>{open ? "▲" : "▼"}</span>
