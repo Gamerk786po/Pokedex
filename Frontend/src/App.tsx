@@ -1,4 +1,4 @@
-import Body from "./components/body/body";
+import { Outlet } from "react-router-dom";
 import Header from "./components/header/header";
 import { PokedexContexts } from "./PokedexContexts";
 
@@ -9,7 +9,7 @@ function App() {
       <div className="min-h-screen bg-gradient-to-r from-blue-200 to-blue-400">
         <PokedexContexts>
           <Header />
-          <Body />
+          <Outlet />
         </PokedexContexts>
       </div>
     </>

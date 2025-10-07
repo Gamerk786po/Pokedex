@@ -30,7 +30,7 @@ import {
 } from "../body/bodyInterfaces";
 
 // The component for body
-const Body = () => {
+const PokedexBody = () => {
   // Storring the error for extracting pokemons data
   const [error, setError] = useState<string>("");
 
@@ -454,4 +454,4 @@ const Body = () => {
   );
 };
 // Exporting the component
-export default Body;
+export default PokedexBody;
