@@ -27,7 +27,7 @@ import {
   RawEvolutionChain,
   PokemonEvolutionsInterface,
   PokemonDamageRelations,
-} from "../body/bodyInterfaces";
+} from "./bodyInterfaces";
 
 // The component for body
 const PokedexBody = () => {
