@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -16,10 +17,11 @@ import ItemBody from "./components/ItemBody/ItemBody.tsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index element={<Navigate to="/home" replace />} />
       <Route path="home" element={<HomeBody />} />
       <Route path="user" element={<ProfileBody />} />
       <Route path="pokedex" element={<PokedexBody />} />
-      <Route path="items" element={<ItemBody />} />
+      <Route path="item" element={<ItemBody />} />
     </Route>
   )
 );
