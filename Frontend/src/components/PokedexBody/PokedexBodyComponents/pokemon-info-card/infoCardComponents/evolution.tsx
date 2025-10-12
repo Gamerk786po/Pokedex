@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { EvolutionDetails } from "../../../bodyInterfaces";
+import { EvolutionDetails } from "../../../PokedexBodyInterface";
 
 // Props for each evolution
 interface EvolutionProps {

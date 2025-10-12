@@ -1,11 +1,11 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-const Card = lazy(() => import("./bodyComponents/card"));
+const Card = lazy(() => import("./PokedexBodyComponents/card"));
 import { motion, AnimatePresence } from "framer-motion"; // for using framer motion
-import PaginationButton from "./bodyComponents/Pagination-button";
-import LoadingScreen from "./bodyComponents/loadingScreen";
-import ErrorScreen from "./bodyComponents/errorScreen";
+import PaginationButton from "./PokedexBodyComponents/Pagination-button";
+import LoadingScreen from "./PokedexBodyComponents/loadingScreen";
+import ErrorScreen from "./PokedexBodyComponents/errorScreen";
 import { usePokemon } from "../../context/PokemonContext/usePokemon";
-import InfoCard from "./bodyComponents/pokemon-info-card/infocard";
+import InfoCard from "./PokedexBodyComponents/pokemon-info-card/infocard";
 import { useSpecies } from "../../context/SpeciesContext/useSpecies";
 import { useEvolutions } from "../../context/EvolutionsContext/useEvolutions";
 import { useEffectiveness } from "../../context/EffectivenessContext/useEffectiveness";
@@ -27,7 +27,7 @@ import {
   RawEvolutionChain,
   PokemonEvolutionsInterface,
   PokemonDamageRelations,
-} from "./bodyInterfaces";
+} from "./PokedexBodyInterface";
 
 // The component for body
 const PokedexBody = () => {

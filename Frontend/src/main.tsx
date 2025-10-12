@@ -8,13 +8,16 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import PokedexBody from "./components/PokedexBody/body.tsx";
+import PokedexBody from "./components/PokedexBody/PokedexBody.tsx";
+import HomeBody from "./components/HomeBody/HomeBody.tsx";
+import ProfileBody from "./components/ProfileBody/ProfileBody.tsx";
+import ItemBody from "./components/ItemBody/ItemBody.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="home" element={<HomeBody />} />
-      <Route path="user" element={<UserBody />} />
+      <Route path="user" element={<ProfileBody />} />
       <Route path="pokedex" element={<PokedexBody />} />
       <Route path="items" element={<ItemBody />} />
     </Route>
