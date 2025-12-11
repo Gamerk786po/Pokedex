@@ -19,12 +19,12 @@ const HomeBody = () => {
   return (
     <>
       {/* Div containing Home content */}
-      <div className="mt-16 md:mt-24 xl:mt-30 pb-10 px-4 flex flex-col gap-6 justify-center items-center w-full text-center">
-        <h1 className="text-3xl sm:text-4xl xl:text-5xl font-bold">
+      <div className="mt-16 md:mt-24 xl:mt-30 pb-10 px-4 flex flex-col gap-6 2xl:gap-10 justify-center items-center w-full text-center">
+        <h1 className="text-3xl sm:text-4xl xl:text-5xl 2xl:text-6xl font-bold">
           Welcome to the Pokedex!
         </h1>
 
-        <p className="text-lg sm:text-2xl xl:text-3xl font-light max-w-[80rem]">
+        <p className="text-lg sm:text-2xl xl:text-3xl 2xl:text-5xl 2xl:leading-relaxed font-light max-w-[80rem]">
           Explore detailed information about Pokemons and manage your
           competitive teams
         </p>
