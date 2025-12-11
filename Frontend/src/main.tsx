@@ -22,6 +22,7 @@ const router = createBrowserRouter(
       <Route path="user" element={<ProfileBody />} />
       <Route path="pokedex" element={<PokedexBody />} />
       <Route path="item" element={<ItemBody />} />
+      <Route path="profile" element={<ProfileBody />} />
     </Route>
   )
 );

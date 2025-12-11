@@ -13,6 +13,9 @@ const navigationLinks = [
     label: "Items-Search",
     href: "/item",
   },
+  { 
+    label: "Profile", href: "/profile" 
+  },
 ];
 
 const HomeBody = () => {
