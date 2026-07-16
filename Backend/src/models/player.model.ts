@@ -81,13 +81,13 @@ playerSchema.methods.generateRefreshToken = function (this: any) {
   // Taking secret and expiry from .env
   const secret = process.env.REFRESH_TOKEN_SECRET;
   const expiry = process.env.REFRESH_TOKEN_EXPIRY as StringValue;
-  
+
   // checking if secret is undefined or not
   if (!secret)
     throw new Error(
       "REFRESH_TOKEN_SECRET is not defined in the environment variables."
     );
-    // Generating refresh token
+  // Generating refresh token
   jwt.sign(
     {
       _id: this._id,
