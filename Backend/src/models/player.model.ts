@@ -98,4 +98,5 @@ playerSchema.methods.generateRefreshToken = function (this: any) {
     }
   );
 };
+
 export const Player = model("Player", playerSchema);

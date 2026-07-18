@@ -32,27 +32,29 @@ OtpSchema.statics.generateOtp = async function (this: any, email: String) {
     code,
     email,
   });
-//   returning the code
+  //   returning the code
   return code;
 };
 
 // Static method to verify Otp
-OtpSchema.statics.verifyOtp = async function (this: any, email: String, code: String){
-    // Finding record in collection
-    const otpRecord = await this.findOne(
-        {
-            email: email.toLowerCase(),
-            code: code.trim()
-        }
-    )
-    // returning false when otpRecord isn't in collection
-    if(!otpRecord){
-        return false;
-    }
-    // Deleting the otpRecord after verification
-    await otpRecord.deleteOne();
-    // Returning true
-    return true
-}
+OtpSchema.statics.verifyOtp = async function (
+  this: any,
+  email: String,
+  code: String
+) {
+  // Finding record in collection
+  const otpRecord = await this.findOne({
+    email: email.toLowerCase(),
+    code: code.trim(),
+  });
+  // returning false when otpRecord isn't in collection
+  if (!otpRecord) {
+    return false;
+  }
+  // Deleting the otpRecord after verification
+  await otpRecord.deleteOne();
+  // Returning true
+  return true;
+};
 
 export const Otp = model("Otp", OtpSchema);
