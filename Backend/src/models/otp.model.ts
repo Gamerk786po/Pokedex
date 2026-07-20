@@ -1,5 +1,6 @@
+import { randomInt } from "crypto";
 import { Schema, model } from "mongoose";
-import crypto from "crypto";
+
 
 const OtpSchema = new Schema(
   {
@@ -26,7 +27,7 @@ const OtpSchema = new Schema(
 // Static method for generating a doc in otp collection
 OtpSchema.statics.generateOtp = async function (this: any, email: String) {
   // Generating 6 digit code
-  const code = crypto.randomInt(0, 1000000).toString().padStart(6, "0");
+  const code = randomInt(0, 1000000).toString().padStart(6, "0");
   // Creating a doc in collection OTP
   await this.create({
     code,
