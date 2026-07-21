@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 
-const playerSchema = new Schema(
+const UserSchema = new Schema(
   {
     userName: {
       type: String,
@@ -37,13 +37,13 @@ const playerSchema = new Schema(
 );
 
 // Hashing password before save
-playerSchema.pre("save", async function (this: any) {
+UserSchema.pre("save", async function (this: any) {
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
 // Method for comaparring password
-playerSchema.methods.isPasswordCorrect = async function (
+UserSchema.methods.isPasswordCorrect = async function (
   this: any,
   password: string
 ) {
@@ -51,7 +51,7 @@ playerSchema.methods.isPasswordCorrect = async function (
 };
 
 // Method for generating tokens
-playerSchema.methods.generateAccessToken = function (this: any) {
+UserSchema.methods.generateAccessToken = function (this: any) {
   const secret = process.env.ACCESS_TOKEN_SECRET;
   const expiry = process.env.ACCESS_TOKEN_EXPIRY as StringValue;
 
@@ -77,7 +77,7 @@ playerSchema.methods.generateAccessToken = function (this: any) {
 };
 
 // Generating refresh Token
-playerSchema.methods.generateRefreshToken = function (this: any) {
+UserSchema.methods.generateRefreshToken = function (this: any) {
   // Taking secret and expiry from .env
   const secret = process.env.REFRESH_TOKEN_SECRET;
   const expiry = process.env.REFRESH_TOKEN_EXPIRY as StringValue;
@@ -99,4 +99,4 @@ playerSchema.methods.generateRefreshToken = function (this: any) {
   );
 };
 
-export const Player = model("Player", playerSchema);
+export const User = model("User", UserSchema);

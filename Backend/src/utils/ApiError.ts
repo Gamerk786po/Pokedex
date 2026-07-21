@@ -8,9 +8,9 @@ class apiError extends Error {
   //   Constructor
   constructor(
     statusCode: number,
-    message: string,
-    errors: any[],
-    errorStack: string
+    message: string = "Something went wrong",
+    errors: any[] = [],
+    errorStack: string = ""
   ) {
     super(message);
     this.statusCode = statusCode;
