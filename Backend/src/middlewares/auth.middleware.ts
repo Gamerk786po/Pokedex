@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 import { apiError } from "../utils/ApiError.js";
 
 // Function for Authorization
-export const jwtVerify = (req: any, res: any, next: any) => {
+export const jwtVerify = async (req: any, res: any, next: any) => {
   try {
     // getting Token from cookies or header
     const token =
@@ -21,7 +21,7 @@ export const jwtVerify = (req: any, res: any, next: any) => {
     // Checking if decodedToken is not a string and _id is in decodedToken
     if (typeof decodedToken !== "string" && "_id" in decodedToken) {
       // Finding user by _id in decodedToken
-      const user = User.findById(decodedToken?._id);
+      const user = await User.findById(decodedToken?._id);
       //   Attaching user with request
       req.user = user;
       next();
@@ -30,5 +30,6 @@ export const jwtVerify = (req: any, res: any, next: any) => {
     }
   } catch (error) {
     return next(new apiError(401, error.message || "Invalid Access Token"));
+    console.error("Email Error:", error);
   }
 };

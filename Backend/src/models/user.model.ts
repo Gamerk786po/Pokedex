@@ -1,9 +1,29 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model} from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 
-const UserSchema = new Schema(
+// Interface for User
+interface IUser{
+  userName: string;
+  email: string;
+  password: string;
+  avatar: string;
+  isVerified?: boolean;
+  refreshToken?: string;
+}
+
+// Interface for UserMethods
+interface IUserMethods{
+  isPasswordCorrect(password: string): Promise<boolean>;
+  generateAccessToken(): string;
+  generateRefreshToken(): string;
+}
+
+// Type Model
+type UserModel = Model<IUser, {}, IUserMethods>
+// UserSchema
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     userName: {
       type: String,
@@ -88,7 +108,7 @@ UserSchema.methods.generateRefreshToken = function (this: any) {
       "REFRESH_TOKEN_SECRET is not defined in the environment variables."
     );
   // Generating refresh token
-  jwt.sign(
+  return jwt.sign(
     {
       _id: this._id,
     },
@@ -99,4 +119,4 @@ UserSchema.methods.generateRefreshToken = function (this: any) {
   );
 };
 
-export const User = model("User", UserSchema);
+export const User = model<IUser, UserModel>("User", UserSchema);

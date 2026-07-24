@@ -5,7 +5,7 @@ class ApiResponse {
   data: any;
   status: boolean;
   // Constructor
-  constructor(statusCode: number, message = "Success", data: any) {
+  constructor(statusCode: number, message = "Success", data: any = {}) {
     this.statusCode = statusCode;
     this.message = message;
     this.data = data;

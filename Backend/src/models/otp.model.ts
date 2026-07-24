@@ -1,8 +1,23 @@
 import { randomInt } from "crypto";
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 
+// Interface for Otp
+interface IOtp{
+  code: string;
+  email: string;
+  createdAt?: Date;
+}
 
-const OtpSchema = new Schema(
+// Interface for OtpStatics
+interface IOtpStatics{
+  generateOtp(email:string): Promise<string>;
+  verifyOtp(email: string, code:string) : Promise<boolean>;
+}
+// Model Type
+type OtpModel = Model<IOtp, {}, {}, {}, IOtpStatics>
+
+// Otp Scehma
+const OtpSchema = new Schema<IOtp, OtpModel, {}, {}, {}, IOtpStatics>(
   {
     code: {
       type: String,
@@ -25,7 +40,7 @@ const OtpSchema = new Schema(
 );
 
 // Static method for generating a doc in otp collection
-OtpSchema.statics.generateOtp = async function (this: any, email: String) {
+OtpSchema.statics.generateOtp = async function (this: any, email: String): Promise<string> {
   // Generating 6 digit code
   const code = randomInt(0, 1000000).toString().padStart(6, "0");
   // Creating a doc in collection OTP

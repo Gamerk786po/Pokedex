@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import PokemonSchema from "./pokemon.schema"; // importing PokemonSchema
+import PokemonSchema from "./pokemon.schema.js"; // importing PokemonSchema
 
 
 // Team Schema
@@ -10,7 +10,7 @@ const TeamSchema = new Schema({
   },
   owner: {
     type: Schema.Types.ObjectId, //relation with Player
-    ref: "Player",
+    ref: "User",
   },
   pokemons: {
     type: [PokemonSchema],
