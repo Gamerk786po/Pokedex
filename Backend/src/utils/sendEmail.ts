@@ -1,9 +1,11 @@
 import nodemailer from "nodemailer"
+import dotenv from "dotenv"
+dotenv.config();
 
 // Creating a nodemailer transporter
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: Number(process.env.SMTP_PORT) || 587,
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
@@ -23,7 +25,7 @@ export const sendOtp = async({otp, email}: OtpPrams): Promise<boolean> => {
         // Sending mail
         await transporter.sendMail(
             {
-                from: "abdullahpper@gmail.com",
+                from: `"Pokédex Team" <${process.env.SMTP_USER || "abdullahpper@gmail.com"}>`,
                 to: email,
                 subject: "Your Pokédex Verification Code",
                 html: `
@@ -39,6 +41,6 @@ export const sendOtp = async({otp, email}: OtpPrams): Promise<boolean> => {
         return true
     }catch(error){
         console.error("Email Error:", error);
-        throw new Error("Something went Wrong!")
+        throw new Error("Failed to send OTP email.")
     }
 }
