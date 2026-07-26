@@ -6,7 +6,7 @@ import { sendOtp } from "../utils/sendEmail.js";
 import { ApiResponse } from "../utils/ApiResp.js";
 
 // Function for generating Tokens.
-const generateTokens = async (_id: String) => {
+const generateTokens = async (_id: string) => {
   try {
     const user = await User.findById(_id);
     // if user with _id doesn't exist
@@ -22,10 +22,71 @@ const generateTokens = async (_id: String) => {
     // Returning the tokens
     return { accessToken, refreshToken };
   } catch (error) {
-    throw new Error("Something went wrong!");
     console.error("Email Error:", error);
+    throw new Error("Something went wrong!");
   }
 };
+
+const registration = asyncHandler(async (req: any, res: any) => {
+  const { userName, email, password, avatar, otpCode } = req.body || {};
+  // If fields are empty
+  console.log(userName, email, password, avatar, otpCode);
+  if (
+    [userName, email, password, avatar, otpCode].some(
+      (data) => !data || String(data)?.trim() === ""
+    )
+  ) {
+    throw new apiError(400, "All fields must me filled");
+  }
+  // If User already exists
+  if (
+    await User.findOne({
+      $or: [{ userName, email }],
+    })
+  ) {
+    throw new apiError(400, " User already exists");
+  }
+  // Verifying if otpCode is correct
+  if (!Otp.verifyOtp(email, String(otpCode))) {
+    throw new apiError(400, "Invalid Otp-code");
+  }
+  // Creating a User
+  const user = await User.create({
+    userName: userName,
+    email: email,
+    password: password,
+    avatar: avatar,
+    isVerified: true,
+  });
+  // If user is not created
+  if (!user) {
+    throw new apiError(500, "Something went wrong while registering");
+  }
+  const { accessToken, refreshToken } = await generateTokens(
+    user._id.toString()
+  );
+  // Getting created user from database
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
+  // Options for cookies
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  // Returning response
+  return res
+    .status(201)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(201, "User is created succesfully", {
+        user: createdUser,
+        accessToken,
+        refreshToken,
+      })
+    );
+});
 
 const otpRegistrationSend = asyncHandler(async (req: any, res: any) => {
   const { userName, email, password, avatar } = req.body;
@@ -53,6 +114,4 @@ const otpRegistrationSend = asyncHandler(async (req: any, res: any) => {
     .json(new ApiResponse(200, "OTP sent successfully to your email!"));
 });
 
-export {
-  otpRegistrationSend
-}
+export { otpRegistrationSend, registration };
