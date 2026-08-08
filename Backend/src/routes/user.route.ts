@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { otpRegistrationSend, registration } from "../controllers/user.controller.js";
+import { login, otpRegistrationSend, registration } from "../controllers/user.controller.js";
 
 const router = Router();
 
@@ -7,5 +7,7 @@ const router = Router();
 router.route("/sendOtp").post(otpRegistrationSend);
 // Route for registration
 router.route("/registration").post(registration);
+// Route for log-in
+router.route("/login").post(login);
 
 export default router;

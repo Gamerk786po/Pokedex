@@ -27,6 +27,7 @@ const generateTokens = async (_id: string) => {
   }
 };
 
+// Registration Controller
 const registration = asyncHandler(async (req: any, res: any) => {
   const { userName, email, password, avatar, otpCode } = req.body || {};
   // If fields are empty
@@ -88,6 +89,7 @@ const registration = asyncHandler(async (req: any, res: any) => {
     );
 });
 
+// Send Otp code for Registration Controller
 const otpRegistrationSend = asyncHandler(async (req: any, res: any) => {
   const { userName, email, password, avatar } = req.body;
   // If fields are empty
@@ -114,4 +116,58 @@ const otpRegistrationSend = asyncHandler(async (req: any, res: any) => {
     .json(new ApiResponse(200, "OTP sent successfully to your email!"));
 });
 
-export { otpRegistrationSend, registration };
+// Log-in Controller
+const login = asyncHandler(async (req: any, res: any) => {
+  const { userName, email, password } = req.body;
+
+  // Checking if any field is empty
+  if (
+    [userName, email, password].some((data) => {
+      !data || String(data).trim() == "";
+    })
+  ) {
+    throw new apiError(400, "All fields must me filled");
+  }
+
+  // Checking if user exists
+  const user = await User.findOne({
+    $or: [{ userName, email }],
+  });
+
+  if (!user) {
+    throw new apiError(409, "User doesn't exist");
+  }
+
+  // Checking password
+  const isPasswordCorrect = await user.isPasswordCorrect(password);
+  if (!isPasswordCorrect) {
+    throw new apiError(401, "Incorrect Password");
+  }
+
+  // Creating Tokens
+  const { accessToken, refreshToken } = await generateTokens(
+    user._id.toString()
+  );
+
+  // logged-in user
+  const loggedInUser = await User.findById(user._id).select("-password -registerToken");
+  // Options for cookies
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(200, "logged-in successfully", {
+        user: loggedInUser,
+        accessToken,
+        refreshToken,
+      })
+    );
+});
+
+export { otpRegistrationSend, registration, login };
